@@ -102,7 +102,7 @@ def test_observation_dispatch_preserves_configured_order_sizes_and_scaling():
         dof_vel=2.0,
         base_ang_vel=0.5,
         dof_pos_target=0.25,
-        commands=[2.0, 4.0, 8.0],
+        commands=[2.0, 4.0, 8.0, 0.4],  # added height command
         projected_gravity=2.0,
         dof_pos_obs=list(range(1, 13)),
         dof_accel=3.0,
@@ -111,13 +111,13 @@ def test_observation_dispatch_preserves_configured_order_sizes_and_scaling():
     controller = _controller(cfg)
     controller.last_action[0] = 0.5 * (cfg.lower_joint_limit + cfg.upper_joint_limit)
     ordered = torch.tensor(SDK_IN_QGYM_ORDER, dtype=torch.float)
-    expected = torch.cat(
+    expected = torch.cat(  # this is a really unhelpful set of magic numbers
         (
             torch.tensor([DeployConfig.phase_frequency / 4]),
             -ordered,
             torch.tensor([0.2, -0.4, 0.6]),
             controller.last_action[0] / 0.25,
-            torch.tensor([0.25, -0.0625, 0.09375]),
+            torch.tensor([0.25, -0.0625, 0.09375, 0.4+0.8500000238418579]),  # added a value for height command, I think?
             torch.tensor([0.0, -0.5, 0.0]),
             ordered / torch.arange(1, 13),
             ordered,
