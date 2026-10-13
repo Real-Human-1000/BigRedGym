@@ -79,6 +79,10 @@ class TeleopCommands:
         self.max_vel_yaw = 2.0
         self.increment_yaw = self.max_vel_yaw * 0.2
 
+        self.min_height = 0.5
+        self.max_height = 1.5
+        self.increment_height = (self.max_height - self.min_height) * 0.2
+
         env.commands[:] = 0.0
         env.commands[:, 0] = 1.0  # seed forward velocity so motion is visible
         if hasattr(env.cfg, "commands"):
@@ -101,6 +105,10 @@ class TeleopCommands:
             c[:, 2] = torch.clamp(c[:, 2] + self.increment_yaw, max=self.max_vel_yaw)
         elif action == "yaw_right":
             c[:, 2] = torch.clamp(c[:, 2] - self.increment_yaw, min=-self.max_vel_yaw)
+        elif action == "up":
+            c[:, 3] = torch.clamp(c[:, 3] + self.increment_height, max=self.max_height)
+        elif action == "down":
+            c[:, 3] = torch.clamp(c[:, 3] - self.increment_height, min=self.min_height)
         elif action == "reset":
             self.env.timed_out[:] = True
             self.env.reset()

@@ -13,6 +13,11 @@ class Go2Trot(LeggedRobot):
     def _init_buffers(self):
         super()._init_buffers()
 
+        # Added command for height control
+        self.commands = torch.zeros(
+            self.num_envs, 4, dtype=torch.float, device=self.device
+        )
+
         self._actuated_dof_pos_limits = self.dof_pos_limits.index_select(
             0, self.actuated_dof_indices
         )
@@ -115,8 +120,10 @@ class Go2Trot(LeggedRobot):
         masked_update(self.phase_frequency, phase_frequency, reset_mask)
 
     def _resample_commands(self, command_mask):
+        # command_mask is probably all True
         super()._resample_commands(command_mask)
 
+        # Set forward commands to be some random value with a little bit of random variability
         forward_commands = torch.tensor(
             self.command_ranges["lin_vel_x"], device=self.device
         )
@@ -129,6 +136,8 @@ class Go2Trot(LeggedRobot):
             torch.randn(self.num_envs, device=self.device) * self.cfg.commands.var
         )
         masked_update(self.commands[:, 0], forward, command_mask)
+        # ^ update self.commands to have the randomized forward commands
+        # Instead of being totally random, self.commands[:,0] are structured around the forward_commands from self.ranges
 
         if 0 in self.cfg.commands.ranges.lin_vel_x:
             # Include forward-only, rotation-only, and stopped examples.
@@ -144,6 +153,15 @@ class Go2Trot(LeggedRobot):
                 torch.rand(self.num_envs, 1, device=self.device) >= 0.9
             )
             self.commands.masked_fill_(drop, 0.0)
+
+        # We need to add some random height commands, too
+        # This is similar to _resample_commands() in legged_robot.py
+        self.commands[:,3] = torch_rand_float(
+            self.command_ranges["height"][0],
+            self.command_ranges["height"][1],
+            (self.num_envs, 1),
+            device=self.device,
+        ).squeeze(1)
 
     def _reset_idx(self, reset_mask):
         super()._reset_idx(reset_mask)
@@ -186,9 +204,9 @@ class Go2Trot(LeggedRobot):
         phase = torch.sin(self._leg_phases())
         contact_strength = self._foot_contact_strength()
         stance_strength = torch.where(
-            phase > 0.0,
-            contact_strength,
-            torch.ones_like(contact_strength),
+            phase > 0.0,  # condition
+            contact_strength,  # if condition
+            torch.ones_like(contact_strength),  # otherwise
         )
         paired_support = torch.clamp(
             2.0 * torch.sqrt(torch.prod(stance_strength, dim=1)),
@@ -252,3 +270,15 @@ class Go2Trot(LeggedRobot):
             ),
             dim=1,
         )
+
+    def _reward_tracking_base_height(self):
+        """Tracking of base height"""
+        error = self.commands[:, :2] - self.base_lin_vel[:, :3]
+        # * scale by (1+|cmd|): if cmd=0, no scaling.
+        error *= 1.0 / (1.0 + torch.abs(self.commands[:, :3]))
+        error = torch.sum(torch.square(error), dim=1)
+        return torch.exp(-error / self.cfg.reward_settings.tracking_sigma)
+
+        # Code from original base height reward:
+        # target = self.cfg.reward_settings.base_height_target
+        # return -torch.square(self.root_states[:, 2] - target)
