@@ -17,6 +17,7 @@ import mujoco
 _FORWARD_RGBA = np.array([1.0, 0.30, 0.30, 1.0], dtype=np.float32)
 _STRAFE_RGBA = np.array([0.30, 0.85, 0.35, 1.0], dtype=np.float32)
 _YAW_RGBA = np.array([0.25, 0.55, 1.0, 1.0], dtype=np.float32)
+_HEIGHT_RGBA = np.array([0.93, 0.62, 0.20, 1.0], dtype=np.float32)
 
 
 def _add_connector(viewer, geom_type, width, start, end, rgba):
@@ -67,6 +68,7 @@ class CommandVisualizer:
         vx = float(cmd[0])
         vy = float(cmd[1]) if cmd.shape[0] > 1 else 0.0
         yaw_rate = float(cmd[2]) if cmd.shape[0] > 2 else 0.0
+        height = float(cmd[3]) if cmd.shape[0] > 3 else 0.0
 
         # Canonical (backend-agnostic) base pose: root_states is [pos(3),
         # quat xyzw(4), ...], scalar-last (task-layer convention).
@@ -77,6 +79,7 @@ class CommandVisualizer:
         c, s = np.cos(yaw), np.sin(yaw)
         fwd_world = np.array([c, s, 0.0])
         left_world = np.array([-s, c, 0.0])
+        up_world = np.array([0.0, 0.0, 1.0])
 
         anchor = base_pos + np.array([0.0, 0.0, self.height_offset])
 
@@ -104,6 +107,17 @@ class CommandVisualizer:
 
         if abs(yaw_rate) > 1e-4:
             self._draw_yaw_arc(viewer, anchor, yaw, yaw_rate)
+
+        if abs(height) > 1e-4:
+            end = anchor + up_world * height * self.scale
+            _add_connector(
+                viewer,
+                mujoco.mjtGeom.mjGEOM_ARROW,
+                self.shaft_radius,
+                anchor,
+                end,
+                _HEIGHT_RGBA,
+            )
 
     def _draw_yaw_arc(self, viewer, center, robot_yaw, yaw_rate):
         # Arc sweeps the heading change after yaw_arc_scale seconds, clamped

@@ -17,6 +17,7 @@ class Go2Trot(LeggedRobot):
         self.commands = torch.zeros(
             self.num_envs, 4, dtype=torch.float, device=self.device
         )
+        self.commands[:,3] = self.command_ranges["height"][0]
 
         self._actuated_dof_pos_limits = self.dof_pos_limits.index_select(
             0, self.actuated_dof_indices
@@ -156,12 +157,13 @@ class Go2Trot(LeggedRobot):
 
         # We need to add some random height commands, too
         # This is similar to _resample_commands() in legged_robot.py
-        self.commands[:,3] = torch_rand_float(
+        heights = torch_rand_float(
             self.command_ranges["height"][0],
             self.command_ranges["height"][1],
             (self.num_envs, 1),
             device=self.device,
         ).squeeze(1)
+        masked_update(self.commands[:,3], heights, command_mask)
 
     def _reset_idx(self, reset_mask):
         super()._reset_idx(reset_mask)
