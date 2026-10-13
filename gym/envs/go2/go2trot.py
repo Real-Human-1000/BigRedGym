@@ -17,7 +17,7 @@ class Go2Trot(LeggedRobot):
         self.commands = torch.zeros(
             self.num_envs, 4, dtype=torch.float, device=self.device
         )
-        self.commands[:,3] = self.command_ranges["height"][0]
+        self.commands[:,3] = self.cfg.commands.ranges.height[0]  # added to set the "null" height value to a low reasonable height
 
         self._actuated_dof_pos_limits = self.dof_pos_limits.index_select(
             0, self.actuated_dof_indices

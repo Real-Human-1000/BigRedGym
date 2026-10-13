@@ -32,7 +32,7 @@ def _controller(cfg=None):
     return SimpleNamespace(
         cfg=cfg,
         obs_vec_size=sum(cfg.obs_sizes[name] for name in cfg.obs_vector),
-        last_command=torch.tensor([0.5, -0.25, 0.75]),
+        last_command=torch.tensor([0.5, -0.25, 0.75, 0.5]),  # added 0.5 for height command
         last_action=torch.zeros(2, 12),
         phase=0.4,
         _gait_reference=torch.linspace(-0.3, 0.3, 12),
@@ -256,7 +256,7 @@ def test_deploy_observations_match_cpu_task_at_100hz(include_applied_action):
             actual = deploy_utility.lowstate_to_obs(controller, message)
             expected = env.get_states(deploy_cfg.obs_vector)[0]
 
-            expected_size = 48 if include_applied_action else 36
+            expected_size = 49 if include_applied_action else 37  # changed to add height command
             assert actual.shape == expected.shape == (expected_size,)
             torch.testing.assert_close(actual, expected, atol=3e-6, rtol=2e-5)
     finally:
