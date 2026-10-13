@@ -273,9 +273,9 @@ class Go2Trot(LeggedRobot):
 
     def _reward_tracking_base_height(self):
         """Tracking of base height"""
-        error = self.commands[:, 3] - self.root_states[:, 2]
+        error = self.commands[:, [3]] - self.root_states[:, [2]]
         # * scale by (1+|cmd|): if cmd=0, no scaling.
-        error *= 1.0 / (1.0 + torch.abs(self.commands[:, 3]))
+        error *= 1.0 / (1.0 + torch.abs(self.commands[:, [3]]))
         error = torch.sum(torch.square(error), dim=1)
         return torch.exp(-error / self.cfg.reward_settings.tracking_sigma)
 
