@@ -279,7 +279,7 @@ class Go2Trot(LeggedRobot):
         # * scale by (1+|cmd|): if cmd=0, no scaling.
         error *= 1.0 / (1.0 + torch.abs(self.commands[:, [3]]))
         error = torch.sum(torch.square(error), dim=1)
-        return torch.exp(-torch.square(error) / self.cfg.reward_settings.tracking_sigma)  # bell curve around error=0
+        return torch.exp(-torch.square(error) / self.cfg.reward_settings.height_tracking_sigma)  # bell curve around error=0
 
         # Code from original base height reward:
         # target = self.cfg.reward_settings.base_height_target

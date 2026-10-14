@@ -92,7 +92,8 @@ class Go2TrotCfg(Go2Cfg):
         disable_motors = False
 
     class reward_settings(Go2Cfg.reward_settings):
-        base_height_target = Go2Cfg.reward_settings.base_height_target
+        base_height_target = Go2Cfg.reward_settings.base_height_target  # maybe change this?
+        height_tracking_sigma = 0.05
 
     class scaling(Go2Cfg.scaling):
         # Canonical RobotLayout order is FL, FR, RL, RR, with
