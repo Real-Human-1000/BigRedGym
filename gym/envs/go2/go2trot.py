@@ -275,12 +275,11 @@ class Go2Trot(LeggedRobot):
 
     def _reward_tracking_base_height(self):
         """Tracking of base height"""
-        error = self.commands[:, [3]] - self.root_states[:, [2]]
+        error = self.base_height - self.commands[:, [3]]# - self.root_states[:, [2]]
         # * scale by (1+|cmd|): if cmd=0, no scaling.
         error *= 1.0 / (1.0 + torch.abs(self.commands[:, [3]]))
+        # Scale by scale value
+        error /= self.scales["base_height"]
         error = torch.sum(torch.square(error), dim=1)
-        return torch.exp(-torch.square(error) / self.cfg.reward_settings.height_tracking_sigma)  # bell curve around error=0
+        return self._sqrdexp(error, sigma=self.cfg.reward_settings.height_tracking_sigma)  # bell curve around error=0
 
-        # Code from original base height reward:
-        # target = self.cfg.reward_settings.base_height_target
-        # return -torch.square(self.root_states[:, 2] - target)

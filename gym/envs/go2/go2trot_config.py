@@ -63,7 +63,7 @@ class Go2TrotCfg(Go2Cfg):
 
         class ranges(Go2Cfg.commands.ranges):
             lin_vel_x = [-1.0, 0.0, 1.0, 3.0]
-            height = [0.2, 0.6]  # according to website: standing = 40cm, crouching = 20cm
+            height = [0.2, 0.5]  # according to website: standing = 40cm, crouching = 20cm
 
     class push_robots(Go2Cfg.push_robots):
         toggle = True
@@ -103,7 +103,7 @@ class Go2TrotCfg(Go2Cfg):
         dof_pos_obs = dof_pos
         dof_pos_target = [0.5 * x for x in dof_pos]
         tau_ff = 4 * [23.7, 23.7, 45.43]
-        commands = [3, 1, 3, 1]  # added to support height command
+        commands = [3, 1, 3, 1]  # added an element to support height command
 
 
 class Go2TrotRunnerCfg(Go2RunnerCfg):
@@ -169,7 +169,7 @@ class Go2TrotRunnerCfg(Go2RunnerCfg):
                 dof_pos_limits = 0.0
                 feet_contact_forces = 0.5  # changed from 0.0
                 dof_near_home = 0.1  # changed from 0.0
-                min_base_height = 0.4  # changed from 0.5
+                min_base_height = 0.0  # changed from 0.5
                 action_rate = 0.25
                 action_rate2 = 0.025
                 trot_support = 0.75  # changed from 0.625
