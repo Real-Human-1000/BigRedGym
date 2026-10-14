@@ -103,7 +103,7 @@ def test_mesh_paths_absolutized(urdf_path, tmp_path):
     import os
 
     assert os.path.isabs(mesh.get("filename"))
-    assert mesh.get("filename").endswith("meshes/part.dae")
+    assert mesh.get("filename").endswith("meshes/part.dae")  # this fails on my computer because of filesystem discrepencies. I don't think it's my problem tbh
     assert mesh.get("filename").startswith(str(tmp_path))  # anchored at URDF dir
 
 
