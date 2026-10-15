@@ -164,7 +164,7 @@ class Go2TrotRunnerCfg(Go2RunnerCfg):
                 ang_vel_xy = 0.01
                 orientation = 2.0  # changed from 1.0
                 torques = 5.0e-6
-                dof_vel = 0.0
+                dof_vel = 0.5  # changed from 0.0
                 stand_still = 0.0
                 dof_pos_limits = 0.2  # changed from 0.0
                 feet_contact_forces = 0.4  # changed from 0.0
