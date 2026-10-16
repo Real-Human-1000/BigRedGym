@@ -142,7 +142,7 @@ def play(env, runner):
             )
             env.step()
             # Record some quantitative measures
-            print(",".join([str(step), str(float(env.base_height[0,0]))]), file=log_file)
+            print(",".join([str(step), str(float(env.base_height[0,0])), str(float(env.commands[0,3]))]), file=log_file)
             env.check_exit()
 
 
