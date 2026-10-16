@@ -65,7 +65,7 @@ class Go2TrotCfg(Go2Cfg):
             lin_vel_x = [-0.5, 0.0, 0.5, 1.0, 2.0]
             lin_vel_y = 0.5
             yaw_vel = 1.5
-            height = [0.2, 0.5]
+            height = [0.2, 0.4]
 
     class push_robots(Go2Cfg.push_robots):
         toggle = True
