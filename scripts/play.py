@@ -132,14 +132,18 @@ def setup(args):
 
 def play(env, runner):
     n_steps = 10 * int(env.max_episode_length)
-    for _ in range(n_steps):
-        runner.set_actions(
-            runner.actor_cfg["actions"],
-            runner.get_inference_actions(),
-            runner.actor_cfg["disable_actions"],
-        )
-        env.step()
-        env.check_exit()
+    with open("logs\\timedata.csv", "w") as log_file:
+        print("step,base_height", file=log_file)
+        for step in range(n_steps):
+            runner.set_actions(
+                runner.actor_cfg["actions"],
+                runner.get_inference_actions(),
+                runner.actor_cfg["disable_actions"],
+            )
+            env.step()
+            # Record some quantitative measures
+            print(",".join([str(step), str(float(env.base_height[0,0])), str(float(env.commands[0,3]))]), file=log_file)
+            env.check_exit()
 
 
 if __name__ == "__main__":
