@@ -165,7 +165,7 @@ class Go2TrotRunnerCfg(Go2RunnerCfg):
                 tracking_base_height = 5.0  # introduced (from 0.0)
                 lin_vel_z = 0.0
                 ang_vel_xy = 0.01
-                orientation = 1.5  # changed from 1.0
+                orientation = 2.0  # changed from 1.0
                 torques = 5.0e-6
                 dof_vel = 0.0
                 stand_still = 0.0
@@ -176,8 +176,8 @@ class Go2TrotRunnerCfg(Go2RunnerCfg):
                 action_rate = 0.1
                 action_rate2 = 0.05
                 trot_support = 2.0  # changed from 3.0
-                swing_contact = 2.0  # changed from 3.0
-                reference_traj = 2.0  # changed from 3.0
+                swing_contact = 1.0  # changed from 3.0
+                reference_traj = 1.0  # changed from 3.0
 
             class termination_weight:
                 termination = 0.01
