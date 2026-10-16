@@ -160,8 +160,8 @@ class Go2TrotRunnerCfg(Go2RunnerCfg):
 
         class reward:
             class weights:
-                tracking_lin_vel = 4.0
-                tracking_ang_vel = 3.0  # changed from 4.0
+                tracking_lin_vel = 5.0
+                tracking_ang_vel = 4.0  # changed from 4.0
                 tracking_base_height = 5.0  # introduced (from 0.0)
                 lin_vel_z = 0.0
                 ang_vel_xy = 0.01
@@ -177,7 +177,7 @@ class Go2TrotRunnerCfg(Go2RunnerCfg):
                 action_rate2 = 0.05
                 trot_support = 1.0  # changed from 3.0
                 swing_contact = 1.0  # changed from 3.0
-                reference_traj = 2.0  # changed from 3.0
+                reference_traj = 1.0  # changed from 3.0
 
             class termination_weight:
                 termination = 0.01
