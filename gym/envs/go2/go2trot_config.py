@@ -35,8 +35,8 @@ class Go2TrotCfg(Go2Cfg):
         ]
 
     class control(Go2Cfg.control):
-        stiffness = {"hip": 20.0, "thigh": 20.0, "calf": 20.0}
-        damping = {"hip": 0.5, "thigh": 0.5, "calf": 0.5}
+        # stiffness = {"hip": 20.0, "thigh": 20.0, "calf": 20.0}
+        # damping = {"hip": 0.5, "thigh": 0.5, "calf": 0.5}
         ctrl_frequency = 50
         desired_sim_frequency = 50
         gait_freq = [1.0, 3.0]  # oscillator frequency range [Hz]
@@ -74,11 +74,11 @@ class Go2TrotCfg(Go2Cfg):
         class startup(Go2Cfg.domain_randomization.startup):
             link_mass_scale_range = [0.9, 1.2]
 
-        class episode(Go2Cfg.domain_randomization.episode):
-            scale_ranges = {
-                "p_gains": [0.9, 1.1],
-                "d_gains": [0.8, 1.2],
-            }
+        # class episode(Go2Cfg.domain_randomization.episode):
+        #     scale_ranges = {
+        #         "p_gains": [0.9, 1.1],
+        #         "d_gains": [0.8, 1.2],
+        #     }
 
     class asset(Go2Cfg.asset):
         file = "{GYM_ROOT_DIR}/resources/robots/" + "go2/urdf/go2.urdf"
@@ -104,6 +104,7 @@ class Go2TrotCfg(Go2Cfg):
         # Residual radians per policy unit, independent of observation ranges.
         dof_pos_target = 4 * [0.2, 0.3, 0.3]
         tau_ff = 4 * [23.7, 23.7, 45.43]
+        stiffness = 1.0/10.0  # standard stiffness value is 20
 
 
 class Go2TrotRunnerCfg(Go2RunnerCfg):
@@ -120,10 +121,11 @@ class Go2TrotRunnerCfg(Go2RunnerCfg):
             "dof_pos_target",
             "phase_obs",
             "phase_frequency",
+            "leg_stiffness"
         ]
         normalize_obs = False
         smooth_exploration = False
-        actions = ["dof_pos_target"]
+        actions = ["dof_pos_target", "leg_stiffness"]
         add_noise = False
         disable_actions = False
 
@@ -152,6 +154,7 @@ class Go2TrotRunnerCfg(Go2RunnerCfg):
             "dof_pos_target",
             "phase_obs",
             "phase_frequency",
+            "leg_stiffness"
         ]
         normalize_obs = False
 

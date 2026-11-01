@@ -6,6 +6,13 @@ from gym.utils.sampling import masked_update
 from gym.envs.base.legged_robot import LeggedRobot
 
 
+GAIN_NAMES = [
+    "FL",
+    "FR",
+    "RL",
+    "RR"
+]  # names/indices for per-leg stiffness
+
 class Go2Trot(LeggedRobot):
     def __init__(self, cfg, device, headless, backend):
         super().__init__(cfg, device, headless, backend)
@@ -50,6 +57,10 @@ class Go2Trot(LeggedRobot):
         )
         self._update_phase_observation()
         self._update_gait_reference()
+
+        self.leg_stiffness = torch.zeros(
+            self.num_envs, 4, dtype=torch.float, device=self.device
+        )
 
     def _update_phase_observation(self):
         self.phase_obs[:, 0:1] = torch.sin(self.phase)
@@ -144,6 +155,25 @@ class Go2Trot(LeggedRobot):
         super()._post_decimation_step()
         self._update_phase_observation()
         self._update_gait_reference()
+
+    def _pre_compute_torques(self):
+        # Apply leg stiffness values to the appropriate joints
+        # Also compute and add damping values
+        for actuator_index, name in enumerate(self.actuated_dof_names):  # might need to change this to self.robot_layout.dof_names
+            matching_gains = [
+                (GAIN_NAMES[gain_idx], gain_idx)
+                for gain_idx in range(len(GAIN_NAMES))
+                if GAIN_NAMES[gain_idx] in name
+            ]
+            if len(matching_gains) != 1:
+                raise ValueError(
+                    f"expected exactly one PD gain match for {name!r}, "
+                    f"got {matching_gains}"
+                )
+            gain_idx = matching_gains[0][1]
+            self.p_gains[:, actuator_index] = self.leg_stiffness[:, gain_idx]
+            # Use the relation K_d = 0.2 * sqrt(K_p)
+            self.d_gains[:, actuator_index] = 0.2 * (self.leg_stiffness[:, gain_idx])**0.5
 
     def _foot_contact_strength(self):
         """Map upward foot load smoothly from zero to nominal body-weight."""
