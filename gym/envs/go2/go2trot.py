@@ -271,8 +271,8 @@ class Go2Trot(LeggedRobot):
         # Encourage the policy to keep leg stiffness values aroud the default value of 20
         return torch.sum(
             self._sqrdexp(
-                (self.leg_stiffness - 20.0) / self.scales["leg_stiffness"],
-                sigma=40  # wide-ish, but doesn't quite cover the extreme of 50. maybe change this from sqrdexp
+                (self.leg_stiffness - 20.0) / self.scales["stiffness"],
+                sigma=1  # wide-ish, but doesn't quite cover the extreme of 50. maybe change this from sqrdexp
             ),
             dim=1,
         )
