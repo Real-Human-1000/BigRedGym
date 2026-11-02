@@ -41,8 +41,8 @@ BINDINGS = {
     "strafe_right": "L",
     "yaw_left": "N",
     "yaw_right": "M",
-    "up": "UP",
-    "down": "DOWN",
+    # "up": "UP",
+    # "down": "DOWN",
     "reset": "R",
 }
 
