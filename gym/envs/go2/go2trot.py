@@ -58,7 +58,7 @@ class Go2Trot(LeggedRobot):
         self._update_phase_observation()
         self._update_gait_reference()
 
-        self.leg_stiffness = torch.zeros(
+        self.leg_stiffness = 20.0 * torch.ones(
             self.num_envs, 4, dtype=torch.float, device=self.device
         )
 
@@ -139,6 +139,8 @@ class Go2Trot(LeggedRobot):
             reset_mask,
         )
         self._update_phase_observation()
+        # Copying what's happening for dof_pos_target
+        self.leg_stiffness.masked_fill_(reset_mask.unsqueeze(1), 20.0)  # default value
 
     def _post_physics_step(self):
         super()._post_physics_step()
@@ -171,9 +173,12 @@ class Go2Trot(LeggedRobot):
                     f"got {matching_gains}"
                 )
             gain_idx = matching_gains[0][1]
-            self.p_gains[:, actuator_index] = self.leg_stiffness[:, gain_idx]
+            # I would like to constrain the stiffness value somewhere in the actor, but I'm not sure where
+            # This at least guarantees that we can't have absurd or unstable values
+            self.p_gains[:, actuator_index] = torch.clamp(self.leg_stiffness[:, gain_idx], min=self.cfg.control.stiffness_range[0], max=self.cfg.control.stiffness_range[1])
             # Use the relation K_d = 0.2 * sqrt(K_p)
-            self.d_gains[:, actuator_index] = 0.2 * (self.leg_stiffness[:, gain_idx])**0.5
+            # For the original stiffness value of 20, this is a little too high
+            self.d_gains[:, actuator_index] = 0.2 * (torch.clamp(self.leg_stiffness[:, gain_idx], min=self.cfg.control.stiffness_range[0], max=self.cfg.control.stiffness_range[1]))**0.5
 
     def _foot_contact_strength(self):
         """Map upward foot load smoothly from zero to nominal body-weight."""
@@ -258,6 +263,16 @@ class Go2Trot(LeggedRobot):
         return torch.sum(
             self._sqrdexp(
                 (self.dof_pos - self.default_dof_pos) / self.scales["dof_pos_obs"]
+            ),
+            dim=1,
+        )
+
+    def _reward_medium_stiffness(self):
+        # Encourage the policy to keep leg stiffness values aroud the default value of 20
+        return torch.sum(
+            self._sqrdexp(
+                (self.leg_stiffness - 20.0) / self.scales["leg_stiffness"],
+                sigma=40  # wide-ish, but doesn't quite cover the extreme of 50. maybe change this from sqrdexp
             ),
             dim=1,
         )

@@ -57,6 +57,10 @@ class Go2TrotCfg(Go2Cfg):
         gait_joint_offsets = 4 * [0.0, 0.0, 0.0]
         gait_joint_amplitudes = 4 * [0.0, -0.15, 0.30]
 
+        # Controlled stiffness range
+        # Just putting this here bc idk where else to put it
+        stiffness_range = [5.0, 50.0]
+
     class commands(Go2Cfg.commands):
         # Standard deviation in m/s around the forward-command centers below.
         var = 0.1
@@ -177,6 +181,7 @@ class Go2TrotRunnerCfg(Go2RunnerCfg):
                 trot_support = 3.0
                 swing_contact = 3.0
                 reference_traj = 3.0
+                medium_stiffness = 0.5  # introduced
 
             class termination_weight:
                 termination = 0.01
