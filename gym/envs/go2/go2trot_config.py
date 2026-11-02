@@ -35,8 +35,10 @@ class Go2TrotCfg(Go2Cfg):
         ]
 
     class control(Go2Cfg.control):
-        # stiffness = {"hip": 20.0, "thigh": 20.0, "calf": 20.0}
-        # damping = {"hip": 0.5, "thigh": 0.5, "calf": 0.5}
+        # Might be good to keep this active just in case?
+        stiffness = {"hip": 20.0, "thigh": 20.0, "calf": 20.0}
+        damping = {"hip": 0.5, "thigh": 0.5, "calf": 0.5}
+
         ctrl_frequency = 50
         desired_sim_frequency = 50
         gait_freq = [1.0, 3.0]  # oscillator frequency range [Hz]
@@ -108,7 +110,7 @@ class Go2TrotCfg(Go2Cfg):
         # Residual radians per policy unit, independent of observation ranges.
         dof_pos_target = 4 * [0.2, 0.3, 0.3]
         tau_ff = 4 * [23.7, 23.7, 45.43]
-        stiffness = 10.0  # standard stiffness value is 20
+        leg_stiffness = 20.0  # standard stiffness value is 20
 
 
 class Go2TrotRunnerCfg(Go2RunnerCfg):
