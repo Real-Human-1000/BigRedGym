@@ -133,7 +133,7 @@ class Go2Trot(LeggedRobot):
         )
         self._update_phase_observation()
         # Copying what's happening for dof_pos_target
-        self.leg_stiffness.masked_fill_(reset_mask.unsqueeze(1), 20.0)  # default value
+        self.leg_stiffness.masked_fill_(reset_mask.unsqueeze(1), self.cfg.init_state.leg_stiffness)  # default value
 
     def _post_physics_step(self):
         super()._post_physics_step()

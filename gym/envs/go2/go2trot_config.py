@@ -40,6 +40,7 @@ class Go2TrotCfg(Go2Cfg):
             [0.0, 0.0],  # pitch
             [0.0, 0.0],  # yaw
         ]
+        leg_stiffness = 20.0  # default leg stiffness value
 
     class control(Go2Cfg.control):
         # Might be good to keep this active just in case?
@@ -138,7 +139,7 @@ class Go2TrotRunnerCfg(Go2RunnerCfg):
         ]
         normalize_obs = False
         smooth_exploration = False
-        actions = ["dof_pos_target", "leg_stiffness"]
+        actions = ["dof_pos_target"]#, "leg_stiffness"]
         add_noise = False
         disable_actions = False
 
