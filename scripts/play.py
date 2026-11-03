@@ -132,14 +132,22 @@ def setup(args):
 
 def play(env, runner):
     n_steps = 10 * int(env.max_episode_length)
-    for _ in range(n_steps):
-        runner.set_actions(
-            runner.actor_cfg["actions"],
-            runner.get_inference_actions(),
-            runner.actor_cfg["disable_actions"],
-        )
-        env.step()
-        env.check_exit()
+    with open("logs\\timedata.csv", "w") as log_file:
+        print(f"step,{','.join([l + ' expected stance' for l in env.robot_layout.body_groups['feet']])},{','.join([l + ' stiffness' for l in env.cfg.LEG_GAIN_NAMES])}", file=log_file)
+        for step in range(n_steps):
+            runner.set_actions(
+                runner.actor_cfg["actions"],
+                runner.get_inference_actions(),
+                runner.actor_cfg["disable_actions"],
+            )
+            env.step()
+            # Record some quantitative measures
+            print(",".join([
+                str(step),
+                *map(str,env._expected_stance().tolist()[0]),
+                *map(str,env.leg_stiffness.tolist()[0])
+            ]), file=log_file)
+            env.check_exit()
 
 
 if __name__ == "__main__":

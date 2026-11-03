@@ -2,6 +2,13 @@ from gym.envs.go2.go2_config import Go2Cfg, Go2RunnerCfg
 
 
 class Go2TrotCfg(Go2Cfg):
+    LEG_GAIN_NAMES = [
+        "FL",
+        "FR",
+        "RL",
+        "RR"
+    ]  # names/indices for per-leg stiffness
+
     class env(Go2Cfg.env):
         episode_length_s = 5
 

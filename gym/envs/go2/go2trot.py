@@ -6,13 +6,6 @@ from gym.utils.sampling import masked_update
 from gym.envs.base.legged_robot import LeggedRobot
 
 
-GAIN_NAMES = [
-    "FL",
-    "FR",
-    "RL",
-    "RR"
-]  # names/indices for per-leg stiffness
-
 class Go2Trot(LeggedRobot):
     def __init__(self, cfg, device, headless, backend):
         super().__init__(cfg, device, headless, backend)
@@ -163,9 +156,9 @@ class Go2Trot(LeggedRobot):
         # Also compute and add damping values
         for actuator_index, name in enumerate(self.actuated_dof_names):  # might need to change this to self.robot_layout.dof_names
             matching_gains = [
-                (GAIN_NAMES[gain_idx], gain_idx)
-                for gain_idx in range(len(GAIN_NAMES))
-                if GAIN_NAMES[gain_idx] in name
+                (self.cfg.LEG_GAIN_NAMES[gain_idx], gain_idx)
+                for gain_idx in range(len(self.cfg.LEG_GAIN_NAMES))
+                if self.cfg.LEG_GAIN_NAMES[gain_idx] in name
             ]
             if len(matching_gains) != 1:
                 raise ValueError(
