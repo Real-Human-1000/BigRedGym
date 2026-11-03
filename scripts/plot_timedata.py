@@ -12,8 +12,8 @@ def parse_datum(dat):
 if __name__ == "__main__":
     with open("logs\\timedata.csv", "r") as log_file:
         # I'm not even going to bother with a proper CSV reader. I know what I'm doing
-        start_step = 300
-        end_step = 400
+        start_step = 100
+        end_step = 200
         lines = log_file.readlines()
         head = lines[0].strip().split(",")
         data = [[parse_datum(datum) for datum in line.split(",")] for line in lines[(start_step+1):(end_step+1)]]  # trim the head and tail to just get good data

@@ -191,7 +191,7 @@ class Go2TrotRunnerCfg(Go2RunnerCfg):
                 trot_support = 3.0
                 swing_contact = 3.0
                 reference_traj = 3.0
-                medium_stiffness = 0.5  # introduced
+                medium_stiffness = 0.25  # introduced
 
             class termination_weight:
                 termination = 0.01
