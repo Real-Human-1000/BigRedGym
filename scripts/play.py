@@ -137,7 +137,9 @@ def play(env, runner):
         stiffness_head = [l + ' stiffness' for l in env.cfg.LEG_GAIN_NAMES]
         foot_contact_head = [l + ' contact (10x)' for l in env.robot_layout.body_groups['feet']]
         foot_height_head = [l + ' height (100x)' for l in env.robot_layout.body_groups['feet']]
-        print(f"step,{','.join(stance_head)},{','.join(stiffness_head)},{','.join(foot_contact_head)},{','.join(foot_height_head)}", file=log_file)
+        dof_pos_head = [l + ' DOF pos' for l in env.cfg.GO2_DOF_NAMES]
+        dof_target_head = [l + ' DOF target' for l in env.cfg.GO2_DOF_NAMES]
+        print(f"step,{','.join(stance_head)},{','.join(stiffness_head)},{','.join(foot_contact_head)},{','.join(foot_height_head)},{','.join(dof_pos_head)},{','.join(dof_target_head)}", file=log_file)
         for step in range(n_steps):
             runner.set_actions(
                 runner.actor_cfg["actions"],
@@ -151,7 +153,9 @@ def play(env, runner):
                 *map(lambda x: str(x * 10),env._expected_stance().tolist()[0]),
                 *map(str,env.leg_stiffness.tolist()[0]),
                 *map(lambda x: str(x * 10),env._foot_contact_strength().tolist()[0]),  # maybe self.contact_forces[:, self.feet_indices, :]
-                *map(lambda x: str(x * 100),env._rigid_body_pos[0, env.feet_indices, 2].tolist())
+                *map(lambda x: str(x * 100),env._rigid_body_pos[0, env.feet_indices, 2].tolist()),
+                *map(str, env.dof_pos.tolist()[0]),
+                *map(str, (env.dof_pos_target + env.default_dof_pos).tolist()[0])
             ]), file=log_file)
             env.check_exit()
 

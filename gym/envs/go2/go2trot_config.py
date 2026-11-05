@@ -9,6 +9,22 @@ class Go2TrotCfg(Go2Cfg):
         "RR"
     ]  # names/indices for per-leg stiffness
 
+    # Copying this here so I can use it in play
+    GO2_DOF_NAMES = [
+        "FL_hip_joint",
+        "FL_thigh_joint",
+        "FL_calf_joint",
+        "FR_hip_joint",
+        "FR_thigh_joint",
+        "FR_calf_joint",
+        "RL_hip_joint",
+        "RL_thigh_joint",
+        "RL_calf_joint",
+        "RR_hip_joint",
+        "RR_thigh_joint",
+        "RR_calf_joint",
+    ]
+
     class env(Go2Cfg.env):
         episode_length_s = 5
 
@@ -48,7 +64,7 @@ class Go2TrotCfg(Go2Cfg):
         damping = {"hip": 0.5, "thigh": 0.5, "calf": 0.5}
 
         ctrl_frequency = 50
-        desired_sim_frequency = 100
+        desired_sim_frequency = 100  # 100
         gait_freq = [1.0, 3.0]  # oscillator frequency range [Hz]
         # Cycle offsets define a trot: front-left/rear-right move together,
         # half a cycle away from front-right/rear-left.
