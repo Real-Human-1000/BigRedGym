@@ -155,7 +155,7 @@ class Go2TrotRunnerCfg(Go2RunnerCfg):
         ]
         normalize_obs = False
         smooth_exploration = False
-        actions = ["dof_pos_target", "leg_stiffness"]
+        actions = ["dof_pos_target"]#, "leg_stiffness"]
         add_noise = False
         disable_actions = False
 
