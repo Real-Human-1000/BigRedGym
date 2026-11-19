@@ -103,17 +103,27 @@ class Go2Osc(Go2):
         speed = self.commands[:, :1].abs()
         stopped = speed <= osc.stop_threshold
         moving_speed = (speed - osc.stop_threshold).clamp_min(0.0)
+        # omega = torch.where(
+        #     stopped,
+        #     osc.omega_stop,
+        #     (osc.omega_step + osc.omega_slope * moving_speed).clamp(0.0, osc.omega_max),
+        # )
         omega = torch.where(
             stopped,
             osc.omega_stop,
-            (osc.omega_step + osc.omega_slope * moving_speed).clamp(0.0, osc.omega_max),
+            (osc.omega_step + osc.omega_slope * torch.abs(speed)).clamp_min(osc.omega_max),
         )
+        # coupling = torch.where(
+        #     stopped,
+        #     osc.coupling_stop,
+        #     (osc.coupling_step + osc.coupling_slope * moving_speed).clamp(
+        #         0.0, osc.coupling_max
+        #     ),
+        # )
         coupling = torch.where(
             stopped,
             osc.coupling_stop,
-            (osc.coupling_step + osc.coupling_slope * moving_speed).clamp(
-                0.0, osc.coupling_max
-            ),
+            osc.coupling_step,
         )
         offset = stopped.to(self.oscillators.dtype) * osc.offset
         if osc.omega_var > 0:
