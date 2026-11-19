@@ -202,7 +202,7 @@ if __name__ == "__main__":
                 now_time = time.time()
                 percent_complete = (p_idx * damping.size()[0] + d_idx) / (stiffness.size()[0] * damping.size()[0])
                 if percent_complete != 0:
-                    print(f"Percent: {100 * percent_complete :.1f}% (Testing k={stiffness[p_idx]}, b={damping[d_idx]}); Elapsed: {now_time - start_time}; ETA: {format_seconds_to_hms((now_time - start_time) / percent_complete)}")
+                    print(f"Percent: {100 * percent_complete :.1f}% (Testing k={stiffness[p_idx]}, b={damping[d_idx]}); Elapsed: {format_seconds_to_hms(now_time - start_time)}; Estimated time remaining: {format_seconds_to_hms((now_time - start_time) / percent_complete - (now_time - start_time))} (Estimated total {format_seconds_to_hms((now_time - start_time) / percent_complete)})")
                 env.reset()
                 # Start with forward command
                 env.commands[:] = 0.0

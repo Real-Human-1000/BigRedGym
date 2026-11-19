@@ -145,7 +145,7 @@ class Go2OscRunnerCfg(Go2RunnerCfg):
 
         class reward(Go2RunnerCfg.critic.reward):
             class weights(Go2RunnerCfg.critic.reward.weights):
-                tracking_lin_vel = 8.0  # 4.0
+                tracking_lin_vel = 4.0
                 tracking_ang_vel = 4.0
                 lin_vel_z = 0.0
                 ang_vel_xy = 0.0
@@ -154,9 +154,10 @@ class Go2OscRunnerCfg(Go2RunnerCfg):
                 # Keep Go2 smoothing: its formulas differ from ORCAgym's.
                 action_rate = 0.01
                 action_rate2 = 0.001
-                swing_grf = 5.0
-                stance_grf = 5.0
+                swing_grf = 4.0
+                stance_grf = 4.0
                 cursorial = 0.25
+                dof_near_home = 0.25  # to stop legs from splaying out
 
             class termination_weight(Go2RunnerCfg.critic.reward.termination_weight):
                 termination = 0.15

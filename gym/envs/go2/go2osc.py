@@ -251,3 +251,11 @@ class Go2Osc(Go2):
         )
         denominator = (self.dt * self.cfg.control.decimation) ** 2
         return -change.square().sum(dim=1) / denominator
+
+    def _reward_dof_near_home(self):
+        return torch.sum(
+            self._sqrdexp(
+                (self.dof_pos - self.default_dof_pos) / self.scales["dof_pos_obs"]
+            ),
+            dim=1,
+        )
