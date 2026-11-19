@@ -315,19 +315,43 @@ def _(REPO ,
         with open(REPO / filename, "rb") as file:
             return file.read()
 
-    disp_button = mo.download(
-        data=lambda: read_file("displacement.png"),
-        filename=f"displacement.png",
-        mimetype="image/png", label="Download displacement products plot"
+    disp_means_button = mo.download(
+        data=lambda: read_file("displacement_mean.png"),
+        filename=f"displacement_mean.png",
+        mimetype="image/png", label="Download displacement products means plot"
     )
 
-    upright_button = mo.download(
-        data=lambda: read_file("upright.png"),
-        filename=f"upright.png",
-        mimetype="image/png", label="Download upright products plot"
+    disp_stds_button = mo.download(
+        data=lambda: read_file("displacement_std.png"),
+        filename=f"displacement_std.png",
+        mimetype="image/png", label="Download displacement products stds plot"
     )
 
-    mo.vstack([disp_button, upright_button])
+    upright_means_button = mo.download(
+        data=lambda: read_file("upright_mean.png"),
+        filename=f"upright_mean.png",
+        mimetype="image/png", label="Download upright products means plot"
+    )
+
+    upright_stds_button = mo.download(
+        data=lambda: read_file("upright_std.png"),
+        filename=f"upright_std.png",
+        mimetype="image/png", label="Download upright products stds plot"
+    )
+
+    sum_forward_reward_means_button = mo.download(
+        data=lambda: read_file("sum_forward_reward_mean.png"),
+        filename=f"sum_forward_reward_mean.png",
+        mimetype="image/png", label="Download sum forward reward means plot"
+    )
+
+    sum_forward_reward_stds_button = mo.download(
+        data=lambda: read_file("sum_forward_reward_std.png"),
+        filename=f"sum_forward_reward_std.png",
+        mimetype="image/png", label="Download sum forward reward stds plot"
+    )
+
+    mo.vstack([disp_means_button, disp_stds_button, upright_means_button, upright_stds_button, sum_forward_reward_means_button, sum_forward_reward_stds_button])
     return
 
 
