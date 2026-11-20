@@ -68,7 +68,7 @@ class Go2Osc(Go2):
         self._stride_load = torch.zeros(
             self.num_envs, 4,
             device=self.device,
-            dtype=torch.long
+            dtype=torch.float
         )
         self._update_oscillator_observations()
 
@@ -289,5 +289,5 @@ class Go2Osc(Go2):
         penalized for it."""
         load = self._stride_load
         share = load / load.sum(dim=1, keepdim=True).clamp(min=1e-6)
-        deviation = (share - 1.0 / n) * 4  # 4, four for legs
-        return -n * torch.sum(deviation.square(), dim=1)
+        deviation = (share - 1.0 / 4)  # 4, four for legs
+        return -4 * torch.sum(deviation.square(), dim=1)
