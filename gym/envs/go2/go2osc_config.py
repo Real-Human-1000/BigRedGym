@@ -93,7 +93,7 @@ class Go2OscCfg(Go2Cfg):
             scale_ranges = {}  # Keep the nominal PD gains fixed.
 
     class scaling(Go2Cfg.scaling):
-        base_ang_vel = [0.3, 0.3, 0.1]
+        base_ang_vel = 0.3#[0.3, 0.3, 0.1]
         # Canonical joint order: FL, FR, RL, RR; hip, thigh, calf per leg.
         dof_pos = 4 * [0.2, 0.3, 0.3]
         dof_pos_obs = dof_pos
@@ -157,8 +157,8 @@ class Go2OscRunnerCfg(Go2RunnerCfg):
                 swing_grf = 6.0
                 stance_grf = 2.0
                 cursorial = 0.5
-                dof_near_home = 0.25  # to stop legs from splaying out
-                even_load = 1.0  # to stop one leg from being unused or dragged
+                dof_near_home = 0.15  # to stop legs from splaying out
+                even_load = 4.0  # to stop one leg from being unused or dragged
 
             class termination_weight(Go2RunnerCfg.critic.reward.termination_weight):
                 termination = 0.15
