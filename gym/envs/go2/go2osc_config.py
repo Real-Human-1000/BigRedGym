@@ -154,11 +154,11 @@ class Go2OscRunnerCfg(Go2RunnerCfg):
                 # Keep Go2 smoothing: its formulas differ from ORCAgym's.
                 action_rate = 0.01
                 action_rate2 = 0.001
-                swing_grf = 4.0
-                stance_grf = 4.0
-                cursorial = 0.25
+                swing_grf = 6.0
+                stance_grf = 2.0
+                cursorial = 0.5
                 dof_near_home = 0.25  # to stop legs from splaying out
-                even_load = 0.5  # to stop one leg from being unused or dragged
+                even_load = 1.0  # to stop one leg from being unused or dragged
 
             class termination_weight(Go2RunnerCfg.critic.reward.termination_weight):
                 termination = 0.15
