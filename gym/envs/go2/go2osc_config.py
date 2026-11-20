@@ -148,7 +148,7 @@ class Go2OscRunnerCfg(Go2RunnerCfg):
                 tracking_lin_vel = 4.0
                 tracking_ang_vel = 4.0
                 lin_vel_z = 0.0
-                ang_vel_xy = 0.0
+                ang_vel_xy = 0.2
                 orientation = 1.0
                 torques = 12 * 5.0e-7  # Local torque reward uses a joint mean.
                 # Keep Go2 smoothing: its formulas differ from ORCAgym's.
@@ -159,6 +159,10 @@ class Go2OscRunnerCfg(Go2RunnerCfg):
                 cursorial = 0.5
                 dof_near_home = 0.15  # to stop legs from splaying out
                 even_load = 4.0  # to stop one leg from being unused or dragged
+                feet_contact_forces = 0.5  # try to reduce huge impacts; might also reduce bounding/hopping behavior
+                torque_limits = 1.0  # we absolutely need to impose torque limits
+                dof_vel_limits = 1.0  # we also need to impose limits on dof velocity
+                dof_pos_limits = 1.0  # maybe this will help keep limbs away from the edges of their extents
 
             class termination_weight(Go2RunnerCfg.critic.reward.termination_weight):
                 termination = 0.15
