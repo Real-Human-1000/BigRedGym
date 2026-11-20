@@ -52,13 +52,13 @@ class Go2OscCfg(Go2Cfg):
         # Constants related to oscillator dynamics
         stop_threshold = 0.5
         omega_stop = 1.0
-        omega_step = 1.5
-        omega_slope = 1.0
+        omega_step = 1.0  # 1.5; set lower to account for a larger, heavier body
+        omega_slope = 0.5  # 1.0
         omega_max = 4.0
         coupling_stop = 4.0
         coupling_step = 1.0
-        coupling_slope = 0.0
-        coupling_max = 1.0
+        coupling_slope = 0.0  # unused
+        coupling_max = 1.0  # unused
         offset = 1.0
 
         # Reference standard deviations; set all three to zero for diagnostics.
@@ -158,6 +158,7 @@ class Go2OscRunnerCfg(Go2RunnerCfg):
                 stance_grf = 4.0
                 cursorial = 0.25
                 dof_near_home = 0.25  # to stop legs from splaying out
+                even_load = 0.5  # to stop one leg from being unused or dragged
 
             class termination_weight(Go2RunnerCfg.critic.reward.termination_weight):
                 termination = 0.15
