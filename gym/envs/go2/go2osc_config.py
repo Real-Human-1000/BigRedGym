@@ -163,6 +163,7 @@ class Go2OscRunnerCfg(Go2RunnerCfg):
                 torque_limits = 1.0  # we absolutely need to impose torque limits
                 dof_vel_limits = 1.0  # we also need to impose limits on dof velocity
                 dof_pos_limits = 1.0  # maybe this will help keep limbs away from the edges of their extents
+                # TODO: adding the limit rewards really messed up the policy; now squats right above the ground with very tight angles
 
             class termination_weight(Go2RunnerCfg.critic.reward.termination_weight):
                 termination = 0.15

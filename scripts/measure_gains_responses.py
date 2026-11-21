@@ -191,12 +191,14 @@ if __name__ == "__main__":
     sum_forward_reward_means = torch.zeros((stiffness.size()[0], damping.size()[0]))
     sum_forward_reward_stds = torch.zeros((stiffness.size()[0], damping.size()[0]))
     with torch.no_grad():
-        start_time = time.time()
         env, runner = setup(args)
         # Save the original stiffness and damping values to plot
         # This assumes that stiffness and damping is uniform across all joints
-        orig_stiffness = env.cfg.control.stiffness["hip"]
-        orig_damping = env.cfg.control.damping["hip"]
+        orig_stiffness = list(env.cfg.control.stiffness.values())[0]
+        orig_damping = list(env.cfg.control.damping.values())[0]
+        # Starting the start time way before the sweep causes a big offset error
+        # So we will start it immediately before
+        start_time = time.time()
         for p_idx in range(stiffness.size()[0]):
             for d_idx in range(damping.size()[0]):
                 now_time = time.time()
@@ -208,8 +210,10 @@ if __name__ == "__main__":
                 env.commands[:] = 0.0
                 env.commands[:, 0] = 1.5  # mid-range command value
                 # Reset the stiffness and damping
-                env.cfg.control.stiffness = {"hip": stiffness[p_idx], "thigh": stiffness[p_idx], "calf": stiffness[p_idx]}
-                env.cfg.control.damping = {"hip": damping[d_idx], "thigh": damping[d_idx], "calf": damping[d_idx]}
+                # Referencing the keys of the dicts allows this to work for any robot
+                for key in env.cfg.control.stiffness.keys():
+                    env.cfg.control.stiffness[key] = stiffness[p_idx]
+                    env.cfg.control.damping[key] = damping[d_idx]
                 reset_gains(env)
 
                 displacement, upright, sum_forward_reward = play(env, runner)

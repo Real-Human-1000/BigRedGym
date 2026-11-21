@@ -177,25 +177,29 @@ def _(REPO, mo, os):
     # Make sure this is the "Date..._" folder zipped up, with the same name
     # Or whatever folder is inside the task's log folder
     TASK = "go2trot"  # go2trot | mini_cheetah | humanoid | pendulum ...
+    EXPERIMENT_NAME = ""  # blank -> the task's default
+
+    if not EXPERIMENT_NAME.strip():
+        EXPERIMENT_NAME = TASK
 
     # Create logs folder if it doesn't exist
     if not os.path.isdir(REPO / "logs"):
         os.mkdir(REPO / "logs")
-    if not os.path.isdir(REPO / "logs" / TASK):
-        os.mkdir(REPO / "logs" / TASK)
+    if not os.path.isdir(REPO / "logs" / EXPERIMENT_NAME):
+        os.mkdir(REPO / "logs" / EXPERIMENT_NAME)
 
     file_button = mo.ui.file(kind="button", filetypes=[".zip"], multiple=False)
     mo.vstack([file_button])
 
-    return (TASK, file_button)
+    return (TASK, EXPERIMENT_NAME, file_button)
 
 
 
 @app.cell
-def _(REPO, mo, zipfile, os, io, file_button, TASK):
+def _(REPO, mo, zipfile, os, io, file_button, TASK, EXPERIMENT_NAME):
     # Unzip the file
     with zipfile.ZipFile(io.BytesIO(file_button.contents()), 'r') as zip_ref:
-        zip_ref.extractall(REPO / "logs" / TASK)
+        zip_ref.extractall(REPO / "logs" / EXPERIMENT_NAME)
 
     # Confirm that the data is in the right place
     print("Repo folder:")
@@ -203,7 +207,7 @@ def _(REPO, mo, zipfile, os, io, file_button, TASK):
     print("Logs folder:")
     print(os.listdir(REPO / "logs"))
     print("Task folder:")
-    print(os.listdir(REPO / "logs" / TASK))
+    print(os.listdir(REPO / "logs" / EXPERIMENT_NAME))
 
 
 
@@ -233,10 +237,8 @@ def _():
     MAX_KD = 5
     NUM_KP = 25
     NUM_KD = 50
-    EXPERIMENT_NAME = ""  # blank -> the task's default
     return (
         DEVICE,
-        EXPERIMENT_NAME,
         MIN_KP,
         MAX_KP,
         MIN_KD,
