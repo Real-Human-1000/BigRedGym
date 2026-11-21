@@ -61,8 +61,8 @@ class MiniCheetahOscCfg(MiniCheetahCfg):
 
     class control(MiniCheetahCfg.control):
         # * PD Drive parameters:
-        stiffness = {"haa": 35.0, "hfe": 35.0, "kfe": 35.0}
-        damping = {"haa": 1.5, "hfe": 1.5, "kfe": 1.5}
+        stiffness = {"haa": 20.0, "hfe": 20.0, "kfe": 20.0}
+        damping = {"haa": 0.5, "hfe": 0.5, "kfe": 0.5}
         ctrl_frequency = 100
         desired_sim_frequency = 500
 
@@ -80,7 +80,7 @@ class MiniCheetahOscCfg(MiniCheetahCfg):
         offset_range = [0.0, 0.0]
         stop_threshold = 0.5
         omega_stop = 1.0
-        omega_step = 2.0
+        omega_step = 1.0  # 2.0
         omega_slope = 1.0  # 1.0
         omega_max = 4.0  # 4.0
         omega_var = 0.25
@@ -230,8 +230,8 @@ class MiniCheetahOscRunnerCfg(MiniCheetahRunnerCfg):
                 dof_vel = 0.0
                 min_base_height = 1.0
                 collision = 0
-                action_rate = -0.01 #10
-                action_rate2 = -0.001 #1
+                action_rate = 10 #-0.01
+                action_rate2 = 1  #-0.001
                 stand_still = 0.0
                 dof_pos_limits = 0.0
                 feet_contact_forces = 0.0
@@ -244,7 +244,7 @@ class MiniCheetahOscRunnerCfg(MiniCheetahRunnerCfg):
                 enc_pace = 0.0
                 standing_torques = 0.0  # 1.e-5
                 any_symm_gait = 0.0  # Apparently this has always been there? Mysterious
-                pace = 4.0
+                pace = 6.0
 
             class termination_weight:
                 termination = 0.15
