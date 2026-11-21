@@ -243,6 +243,7 @@ class MiniCheetahOscRunnerCfg(MiniCheetahRunnerCfg):
                 coupled_grf = 0.0  # 8.
                 enc_pace = 0.0
                 standing_torques = 0.0  # 1.e-5
+                any_symm_gait = 5.0  # Apparently this has always been there? Mysterious
 
             class termination_weight:
                 termination = 0.15
