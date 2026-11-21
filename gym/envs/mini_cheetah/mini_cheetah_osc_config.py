@@ -81,8 +81,8 @@ class MiniCheetahOscCfg(MiniCheetahCfg):
         stop_threshold = 0.5
         omega_stop = 1.0
         omega_step = 2.0
-        omega_slope = 0.25  # 1.0
-        omega_max = 1.5  # 4.0
+        omega_slope = 1.0  # 1.0
+        omega_max = 4.0  # 4.0
         omega_var = 0.25
         # coupling_step = 0.
         # coupling_stop = 0.
@@ -243,7 +243,8 @@ class MiniCheetahOscRunnerCfg(MiniCheetahRunnerCfg):
                 coupled_grf = 0.0  # 8.
                 enc_pace = 0.0
                 standing_torques = 0.0  # 1.e-5
-                any_symm_gait = 5.0  # Apparently this has always been there? Mysterious
+                any_symm_gait = 0.0  # Apparently this has always been there? Mysterious
+                pace = 2.0
 
             class termination_weight:
                 termination = 0.15
