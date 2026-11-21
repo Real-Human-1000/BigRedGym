@@ -230,8 +230,8 @@ class MiniCheetahOscRunnerCfg(MiniCheetahRunnerCfg):
                 dof_vel = 0.0
                 min_base_height = 1.0
                 collision = 0
-                action_rate = 10  # -0.01
-                action_rate2 = 1  # -0.001
+                action_rate = -0.01 #10
+                action_rate2 = -0.001 #1
                 stand_still = 0.0
                 dof_pos_limits = 0.0
                 feet_contact_forces = 0.0
@@ -244,7 +244,7 @@ class MiniCheetahOscRunnerCfg(MiniCheetahRunnerCfg):
                 enc_pace = 0.0
                 standing_torques = 0.0  # 1.e-5
                 any_symm_gait = 0.0  # Apparently this has always been there? Mysterious
-                pace = 2.0
+                pace = 4.0
 
             class termination_weight:
                 termination = 0.15
