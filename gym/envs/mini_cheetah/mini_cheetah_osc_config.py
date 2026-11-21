@@ -86,12 +86,12 @@ class MiniCheetahOscCfg(MiniCheetahCfg):
         omega_var = 0.25
         # coupling_step = 0.
         # coupling_stop = 0.
-        coupling_stop = 4.0
-        coupling_step = 1.0
+        coupling_stop = 0.0  # 4.0
+        coupling_step = 0.0  # 1.0
         coupling_slope = 0.0
-        coupling_max = 1.0
+        coupling_max = 0.0  # 1.0
         offset = 1.0
-        coupling_var = 0.25
+        coupling_var = 0.0  # 0.25
 
         init_to = "random"
         init_w_offset = True
@@ -244,7 +244,7 @@ class MiniCheetahOscRunnerCfg(MiniCheetahRunnerCfg):
                 enc_pace = 0.0
                 standing_torques = 0.0  # 1.e-5
                 any_symm_gait = 0.0  # Apparently this has always been there? Mysterious
-                pace = 6.0
+                pace = 0.0
 
             class termination_weight:
                 termination = 0.15
