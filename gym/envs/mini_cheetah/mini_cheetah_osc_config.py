@@ -81,8 +81,8 @@ class MiniCheetahOscCfg(MiniCheetahCfg):
         stop_threshold = 0.5
         omega_stop = 1.0
         omega_step = 2.0
-        omega_slope = 1.0
-        omega_max = 4.0
+        omega_slope = 0.25  # 1.0
+        omega_max = 1.5  # 4.0
         omega_var = 0.25
         # coupling_step = 0.
         # coupling_stop = 0.
