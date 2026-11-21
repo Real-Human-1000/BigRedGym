@@ -15,7 +15,7 @@ class MiniCheetahOscCfg(MiniCheetahCfg):
     class env(MiniCheetahCfg.env):
         num_envs = 4096
         num_actuators = 12
-        episode_length_s = 10.0
+        episode_length_s = 5.0
         env_spacing = 3.0
 
     class terrain(MiniCheetahCfg.terrain):
