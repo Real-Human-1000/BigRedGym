@@ -31,6 +31,8 @@ class MiniCheetahOsc(MiniCheetah):
             self.num_envs, 1, device=self.device
         )
 
+        self.osc_enabled = torch.ones_like(self.oscillators, device=self.device, dtype=torch.bool)
+
     def _reset_oscillators(self, reset_mask):
         if self.cfg.osc.init_to == "random":
             candidate = torch.rand_like(self.oscillators) * 2 * torch.pi
@@ -124,7 +126,16 @@ class MiniCheetahOsc(MiniCheetah):
     def _post_physics_step(self):
         super()._post_physics_step()
         self._step_oscillators(self.dt / self.cfg.control.decimation)
+        self._nullify_oscillators()
         return None
+
+    def _nullify_oscillators(self):
+        for e in range(self.osc_enabled.shape[0]):
+            for o in range(4):
+                if not self.osc_enabled[e, o].item():
+                    self.oscillators[e, o] = 0
+                    self.oscillator_obs[e,2*o] = torch.cos(self.oscillators[e,o])
+                    self.oscillator_obs[e,2*o+1] = torch.sin(self.oscillators[e,o])
 
     def _step_oscillators(self, dt=None):
         if dt is None:
@@ -257,6 +268,10 @@ class MiniCheetahOsc(MiniCheetah):
         return torch.sum(rew, dim=1)
 
     def get_swing_grf(self, osc_bool=False, contact_bool=False):
+        # osc_bool true = use boolean logic for oscillator phase (in swing phase or not)
+        # osc_bool false = use smoothly-ramping sine wave to calculate the *amount* of swing phase we're in
+        # contact_bool true = use boolean logic for whether the robot is contacting the ground
+        # contact_bool false = use GRF to calculate amount of contact
         if osc_bool:
             phase = torch.lt(self.oscillators, torch.pi).int()
         else:

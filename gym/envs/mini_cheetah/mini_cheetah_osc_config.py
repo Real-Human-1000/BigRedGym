@@ -71,7 +71,7 @@ class MiniCheetahOscCfg(MiniCheetahCfg):
         grf_threshold = 0.1  # 20. # Normalized to body weight
         # oscillator parameters
         omega = 3  # gets overwritten
-        coupling = 1  # gets overwritten
+        coupling = 0  # gets overwritten
         osc_bool = False  # not used in paper
         grf_bool = False  # not used in paper
         randomize_osc_params = False
@@ -80,10 +80,10 @@ class MiniCheetahOscCfg(MiniCheetahCfg):
         offset_range = [0.0, 0.0]
         stop_threshold = 0.5
         omega_stop = 1.0
-        omega_step = 1.0  # 2.0
+        omega_step = 2.0  # 2.0
         omega_slope = 1.0  # 1.0
         omega_max = 4.0  # 4.0
-        omega_var = 0.25
+        omega_var = 0.0  # 0.25
         # coupling_step = 0.
         # coupling_stop = 0.
         coupling_stop = 0.0  # 4.0
@@ -221,8 +221,8 @@ class MiniCheetahOscRunnerCfg(MiniCheetahRunnerCfg):
 
         class reward:
             class weights:
-                tracking_lin_vel = 4.0
-                tracking_ang_vel = 2.0
+                tracking_lin_vel = 2.0  # 4.0
+                tracking_ang_vel = 1.0  # 2.0
                 lin_vel_z = 0.0
                 ang_vel_xy = 0.0
                 orientation = 1.0
@@ -236,8 +236,8 @@ class MiniCheetahOscRunnerCfg(MiniCheetahRunnerCfg):
                 dof_pos_limits = 0.0
                 feet_contact_forces = 0.0
                 dof_near_home = 0.0
-                swing_grf = 1.0
-                stance_grf = 1.0
+                swing_grf = 3.0
+                stance_grf = 3.0
                 swing_velocity = 0.0
                 stance_velocity = 0.0
                 coupled_grf = 0.0  # 8.
