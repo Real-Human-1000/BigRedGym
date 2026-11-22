@@ -5,6 +5,9 @@ from gym.envs.mini_cheetah.mini_cheetah_config import (
 
 BASE_HEIGHT_REF = 0.33
 
+BASE_KP = (50+15)/2
+BASE_KD = (5+0.1)/2
+
 
 class MiniCheetahOscCfg(MiniCheetahCfg):
     class viewer:
@@ -61,8 +64,8 @@ class MiniCheetahOscCfg(MiniCheetahCfg):
 
     class control(MiniCheetahCfg.control):
         # * PD Drive parameters:
-        stiffness = {"haa": 20.0, "hfe": 20.0, "kfe": 20.0}
-        damping = {"haa": 0.5, "hfe": 0.5, "kfe": 0.5}
+        stiffness = {"haa": BASE_KP, "hfe": BASE_KP, "kfe": BASE_KP}
+        damping = {"haa": BASE_KD, "hfe": BASE_KD, "kfe": BASE_KD}
         ctrl_frequency = 100
         desired_sim_frequency = 500
 
@@ -86,8 +89,8 @@ class MiniCheetahOscCfg(MiniCheetahCfg):
         omega_var = 0.0  # 0.25
         # coupling_step = 0.
         # coupling_stop = 0.
-        coupling_stop = 4.0  # 4.0
-        coupling_step = 1.0  # 1.0
+        coupling_stop = 0.0  # 4.0
+        coupling_step = 0.0  # 1.0
         coupling_slope = 0.0
         coupling_max = 1.0  # 1.0
         offset = 1.0
@@ -110,6 +113,18 @@ class MiniCheetahOscCfg(MiniCheetahCfg):
         interval_s = 15
         max_push_vel_xy = 0.05
         push_box_dims = [0.2, 0.2, 0.2]  # x,y,z [m]
+
+    # Added domain randomization to automatically vary parameters
+    class domain_randomization(MiniCheetahCfg.domain_randomization):
+        class startup(MiniCheetahCfg.domain_randomization.startup):
+            contact_friction_range = [0.5, 1.0]
+            link_mass_scale_range = [0.9, 1.1]
+
+        class episode(MiniCheetahCfg.domain_randomization.episode):
+            scale_ranges = {
+                "p_gains": [15/BASE_KP, 50/BASE_KP],
+                "d_gains": [0.1/BASE_KD, 5/BASE_KD],
+            }
 
     class asset(MiniCheetahCfg.asset):
         shank_length_diff = 0  # Units in cm
@@ -236,8 +251,8 @@ class MiniCheetahOscRunnerCfg(MiniCheetahRunnerCfg):
                 dof_pos_limits = 0.0
                 feet_contact_forces = 0.0
                 dof_near_home = 0.0
-                swing_grf = 3.0
-                stance_grf = 3.0
+                swing_grf = 5.0
+                stance_grf = 5.0
                 swing_velocity = 0.0
                 stance_velocity = 0.0
                 coupled_grf = 0.0  # 8.
