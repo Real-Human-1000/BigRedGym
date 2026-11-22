@@ -44,7 +44,7 @@ BINDINGS = {
     "up": "UP",
     "down": "DOWN",
     "reset": "R",
-    "randomize_phases": "=",
+    "reset_phases": "=",
     "toggle_osc_1": "1",
     "toggle_osc_2": "2",
     "toggle_osc_3": "3",
@@ -60,7 +60,7 @@ HELP_LINES = (
     "  N/M           yaw left / yaw right",
     "  Up/Down       up / down (command effects: student TODO)",
     "  R             reset envs",
-    "  =             randomize oscillator phases",
+    "  =             reset oscillator phases",
     "  Esc / window  quit",
     "  commands step in 1/5 increments of max",
 )
@@ -136,9 +136,9 @@ class TeleopCommands:
                 self.env.height_command.fill_(
                     self.env.cfg.height_control.default_height
                 )
-        elif action == "randomize_phases":
+        elif action == "reset_phases":
             r = self.env.cfg.osc.init_to
-            self.env.cfg.osc.init_to = "trot"
+            self.env.cfg.osc.init_to = "random"
             reset_mask = torch.ones(self.env.num_envs, device=self.env.device, dtype=torch.bool)
             self.env._reset_oscillators(reset_mask)
             self.env.cfg.osc.init_to = r
