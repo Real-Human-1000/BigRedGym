@@ -5,8 +5,8 @@ from gym.envs.mini_cheetah.mini_cheetah_config import (
 
 BASE_HEIGHT_REF = 0.33
 
-BASE_KP = (50+20)/2
-BASE_KD = (4.5+0.5)/2
+BASE_KP = 40#(50+20)/2
+BASE_KD = 4.5#(4.5+0.5)/2
 
 
 class MiniCheetahOscCfg(MiniCheetahCfg):
@@ -89,8 +89,8 @@ class MiniCheetahOscCfg(MiniCheetahCfg):
         omega_var = 0.0  # 0.25
         # coupling_step = 0.
         # coupling_stop = 0.
-        coupling_stop = 0.0  # 4.0
-        coupling_step = 0.0  # 1.0
+        coupling_stop = 4.0  # 4.0
+        coupling_step = 1.0  # 1.0
         coupling_slope = 0.0
         coupling_max = 1.0  # 1.0
         offset = 1.0
@@ -115,16 +115,16 @@ class MiniCheetahOscCfg(MiniCheetahCfg):
         push_box_dims = [0.2, 0.2, 0.2]  # x,y,z [m]
 
     # Added domain randomization to automatically vary parameters
-    class domain_randomization(MiniCheetahCfg.domain_randomization):
-        class startup(MiniCheetahCfg.domain_randomization.startup):
-            contact_friction_range = [0.9, 1.1]
-            link_mass_scale_range = [0.9, 1.1]
-
-        class episode(MiniCheetahCfg.domain_randomization.episode):
-            scale_ranges = {
-                "p_gains": [20/BASE_KP, 50/BASE_KP],
-                "d_gains": [0.5/BASE_KD, 4.5/BASE_KD],
-            }
+    # class domain_randomization(MiniCheetahCfg.domain_randomization):
+    #     class startup(MiniCheetahCfg.domain_randomization.startup):
+    #         contact_friction_range = [0.9, 1.1]
+    #         link_mass_scale_range = [0.9, 1.1]
+    #
+    #     class episode(MiniCheetahCfg.domain_randomization.episode):
+    #         scale_ranges = {
+    #             "p_gains": [20/BASE_KP, 50/BASE_KP],
+    #             "d_gains": [0.5/BASE_KD, 4.5/BASE_KD],
+    #         }
 
     class asset(MiniCheetahCfg.asset):
         shank_length_diff = 0  # Units in cm
