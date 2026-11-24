@@ -89,8 +89,8 @@ class MiniCheetahOscCfg(MiniCheetahCfg):
         omega_var = 0.0  # 0.25
         # coupling_step = 0.
         # coupling_stop = 0.
-        coupling_stop = 0.0  # 4.0
-        coupling_step = 0.0  # 1.0
+        coupling_stop = 4.0  # 4.0
+        coupling_step = 1.0  # 1.0
         coupling_slope = 0.0
         coupling_max = 1.0  # 1.0
         offset = 1.0
