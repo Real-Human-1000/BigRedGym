@@ -6,7 +6,7 @@ from gym.envs.mini_cheetah.mini_cheetah_config import (
 BASE_HEIGHT_REF = 0.33
 
 BASE_KP = 40#(50+20)/2
-BASE_KD = 4.0#(4.5+0.5)/2
+BASE_KD = 3.0#(4.5+0.5)/2
 
 
 class MiniCheetahOscCfg(MiniCheetahCfg):
@@ -89,8 +89,8 @@ class MiniCheetahOscCfg(MiniCheetahCfg):
         omega_var = 0.0  # 0.25
         # coupling_step = 0.
         # coupling_stop = 0.
-        coupling_stop = 4.0  # 4.0
-        coupling_step = 1.0  # 1.0
+        coupling_stop = 0.0  # 4.0
+        coupling_step = 0.0  # 1.0
         coupling_slope = 0.0
         coupling_max = 1.0  # 1.0
         offset = 1.0
@@ -242,13 +242,13 @@ class MiniCheetahOscRunnerCfg(MiniCheetahRunnerCfg):
                 ang_vel_xy = 0.0
                 orientation = 1.0
                 torques = 5.0e-6
-                dof_vel = 0.0
+                dof_vel = 0.5  # 0.0
                 min_base_height = 1.0
                 collision = 0
                 action_rate = 10 #-0.01
                 action_rate2 = 1  #-0.001
                 stand_still = 0.0
-                dof_pos_limits = 0.0
+                dof_pos_limits = 0.5  # 0.0
                 feet_contact_forces = 0.0
                 dof_near_home = 0.0
                 swing_grf = 5.0
