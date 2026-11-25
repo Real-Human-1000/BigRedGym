@@ -33,6 +33,7 @@ class MiniCheetahOsc(MiniCheetah):
         self.osc_omega_target = self.cfg.osc.omega * torch.ones(
             self.num_envs, 1, device=self.device
         )
+        self.osc_enabled = torch.ones_like(self.oscillators, device=self.device, dtype=torch.bool)
 
     def _reset_oscillators(self, reset_mask):
         if self.cfg.osc.init_to == "random":
