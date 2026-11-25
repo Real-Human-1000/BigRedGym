@@ -143,6 +143,13 @@ def play(env, runner):
             runner.actor_cfg["disable_actions"],
         )
         env.step()
+        # for n, m in runner.reward_functions.items():
+        #     print(f"{n}: {m()}")
+        s = f"w:{env.osc_omega[0,0].item():.1f}; c:{env.osc_coupling[0,0].item():.1f} "
+        for o in range(env.oscillators.shape[1]):
+            t = env.oscillators[0,o].item() / (2 * torch.pi)
+            s += "#" * int(10 * t) + " " * int(10 * (1 - t)) + " "
+        print(s)
         env.check_exit()
 
 

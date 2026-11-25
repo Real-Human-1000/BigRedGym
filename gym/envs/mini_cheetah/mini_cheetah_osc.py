@@ -30,6 +30,9 @@ class MiniCheetahOsc(MiniCheetah):
         self.osc_offset = self.cfg.osc.offset * torch.ones(
             self.num_envs, 1, device=self.device
         )
+        self.osc_omega_target = self.cfg.osc.omega * torch.ones(
+            self.num_envs, 1, device=self.device
+        )
 
     def _reset_oscillators(self, reset_mask):
         if self.cfg.osc.init_to == "random":
@@ -86,32 +89,39 @@ class MiniCheetahOsc(MiniCheetah):
         if not self.cfg.osc.randomize_osc_params:
             self.compute_osc_slope()
 
+    def _step_omega(self, dt):
+        # Step the oscillator frequency, omega
+        # 1st order system, like an RC circuit
+        # This is meant to slow the rate at which omega can change, encouraging the policy to stick to an omega
+        self.osc_omega = dt * (1 / self.cfg.osc.omega_constant) * (torch.clamp(input=self.osc_omega_target, min=self.cfg.osc.omega_range[0], max=self.cfg.osc.omega_range[1]) - self.osc_omega)
+
     def compute_osc_slope(self):
         cmd_x = torch.abs(self.commands[:, 0:1]) - self.cfg.osc.stop_threshold
         stop = cmd_x < 0
 
         self.osc_offset = stop * self.cfg.osc.offset
-        self.osc_omega = (
-            stop * self.cfg.osc.omega_stop
-            + torch.randn_like(self.osc_omega) * self.cfg.osc.omega_var
-        )
+        # self.osc_omega = (
+        #     stop * self.cfg.osc.omega_stop
+        #     + torch.randn_like(self.osc_omega) * self.cfg.osc.omega_var
+        # )
         self.osc_coupling = (
             stop * self.cfg.osc.coupling_stop
             + torch.randn_like(self.osc_coupling) * self.cfg.osc.coupling_var
         )
 
-        self.osc_omega += (~stop) * torch.clamp(
-            cmd_x * self.cfg.osc.omega_slope + self.cfg.osc.omega_step,
-            min=0.0,
-            max=self.cfg.osc.omega_max,
-        )
+        # self.osc_omega += (~stop) * torch.clamp(
+        #     cmd_x * self.cfg.osc.omega_slope + self.cfg.osc.omega_step,
+        #     min=0.0,
+        #     max=self.cfg.osc.omega_max,
+        # )
+
         self.osc_coupling += (~stop) * torch.clamp(
             cmd_x * self.cfg.osc.coupling_slope + self.cfg.osc.coupling_step,
             min=0.0,
             max=self.cfg.osc.coupling_max,
         )
 
-        self.osc_omega = torch.clamp_min(self.osc_omega, 0.1)
+        # self.osc_omega = torch.clamp_min(self.osc_omega, 0.1)
         self.osc_coupling = torch.clamp_min(self.osc_coupling, 0)
 
     def _post_decimation_step(self):
@@ -123,6 +133,7 @@ class MiniCheetahOsc(MiniCheetah):
 
     def _post_physics_step(self):
         super()._post_physics_step()
+        self._step_omega(self.dt / self.cfg.control.decimation)
         self._step_oscillators(self.dt / self.cfg.control.decimation)
         return None
 

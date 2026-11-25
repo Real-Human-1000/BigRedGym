@@ -71,6 +71,7 @@ class MiniCheetahOscCfg(MiniCheetahCfg):
         grf_threshold = 0.1  # 20. # Normalized to body weight
         # oscillator parameters
         omega = 3  # gets overwritten
+        omega_constant = 10  # 1st-order control time constant
         coupling = 1  # gets overwritten
         osc_bool = False  # not used in paper
         grf_bool = False  # not used in paper
@@ -181,14 +182,15 @@ class MiniCheetahOscRunnerCfg(MiniCheetahRunnerCfg):
             "dof_vel",
             "oscillator_obs",
             "dof_pos_target",
-            #  "osc_omega",
+            "osc_omega",
+            "osc_omega_target"
             #  "osc_coupling"
             #  "oscillators_vel",
             #  "grf",
         ]
         normalize_obs = False
 
-        actions = ["dof_pos_target"]
+        actions = ["dof_pos_target", "osc_omega_target"]
         disable_actions = False
 
         class noise:
@@ -216,6 +218,8 @@ class MiniCheetahOscRunnerCfg(MiniCheetahRunnerCfg):
             "oscillator_obs",
             "oscillators_vel",
             "dof_pos_target",
+            "osc_omega_target",
+            "osc_omega"
         ]
         normalize_obs = True
 
@@ -236,8 +240,8 @@ class MiniCheetahOscRunnerCfg(MiniCheetahRunnerCfg):
                 dof_pos_limits = 0.0
                 feet_contact_forces = 0.0
                 dof_near_home = 0.0
-                swing_grf = 1.0
-                stance_grf = 1.0
+                swing_grf = 3.0  # 1.0
+                stance_grf = 3.0  # 1.0
                 swing_velocity = 0.0
                 stance_velocity = 0.0
                 coupled_grf = 0.0  # 8.
