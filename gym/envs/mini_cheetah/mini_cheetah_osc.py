@@ -132,8 +132,17 @@ class MiniCheetahOsc(MiniCheetah):
         self._update_cmd_switch()
         # self._step_oscillators()
 
+    def _nullify_oscillators(self):
+        for e in range(self.osc_enabled.shape[0]):
+            for o in range(4):
+                if not self.osc_enabled[e, o].item():
+                    self.oscillators[e, o] = 0
+                    self.oscillator_obs[e, 2 * o] = torch.cos(self.oscillators[e, o])
+                    self.oscillator_obs[e, 2 * o + 1] = torch.sin(self.oscillators[e, o])
+
     def _post_physics_step(self):
         super()._post_physics_step()
+        self._nullify_oscillators()
         self._step_omega(self.dt / self.cfg.control.decimation)
         self._step_oscillators(self.dt / self.cfg.control.decimation)
         return None
