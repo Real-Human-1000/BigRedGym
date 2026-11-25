@@ -87,8 +87,8 @@ class MiniCheetahOscCfg(MiniCheetahCfg):
         omega_var = 0.25
         # coupling_step = 0.
         # coupling_stop = 0.
-        coupling_stop = 4.0
-        coupling_step = 1.0
+        coupling_stop = 0.0#4.0
+        coupling_step = 0.0#1.0
         coupling_slope = 0.0
         coupling_max = 1.0
         offset = 1.0
@@ -240,8 +240,8 @@ class MiniCheetahOscRunnerCfg(MiniCheetahRunnerCfg):
                 dof_pos_limits = 0.0
                 feet_contact_forces = 0.0
                 dof_near_home = 0.0
-                swing_grf = 3.0  # 1.0
-                stance_grf = 3.0  # 1.0
+                swing_grf = 4.0  # 1.0
+                stance_grf = 4.0  # 1.0
                 swing_velocity = 0.0
                 stance_velocity = 0.0
                 coupled_grf = 0.0  # 8.
@@ -256,6 +256,6 @@ class MiniCheetahOscRunnerCfg(MiniCheetahRunnerCfg):
 
     class runner(MiniCheetahRunnerCfg.runner):
         run_name = ""
-        experiment_name = "FullSend"
+        experiment_name = "MiniCheetahOsc_FreqControl"
         max_iterations = 500  # number of policy updates
         algorithm_class_name = "PPO2"

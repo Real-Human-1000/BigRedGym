@@ -93,7 +93,7 @@ class MiniCheetahOsc(MiniCheetah):
         # Step the oscillator frequency, omega
         # 1st order system, like an RC circuit
         # This is meant to slow the rate at which omega can change, encouraging the policy to stick to an omega
-        self.osc_omega = dt * (1 / self.cfg.osc.omega_constant) * (torch.clamp(input=self.osc_omega_target, min=self.cfg.osc.omega_range[0], max=self.cfg.osc.omega_range[1]) - self.osc_omega)
+        self.osc_omega += dt * (1 / self.cfg.osc.omega_constant) * (torch.clamp(input=self.osc_omega_target, min=self.cfg.osc.omega_range[0], max=self.cfg.osc.omega_range[1]) - self.osc_omega)
 
     def compute_osc_slope(self):
         cmd_x = torch.abs(self.commands[:, 0:1]) - self.cfg.osc.stop_threshold
