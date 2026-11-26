@@ -34,6 +34,8 @@ class MiniCheetahOsc(MiniCheetah):
             self.num_envs, 1, device=self.device
         )
         self.osc_enabled = torch.ones_like(self.oscillators, device=self.device, dtype=torch.bool)
+        self.kp_obs = torch.ones(self.num_envs, 1, device=self.device)
+        self.kd_obs = torch.ones(self.num_envs, 1, device=self.device)
 
     def _reset_oscillators(self, reset_mask):
         if self.cfg.osc.init_to == "random":
@@ -89,6 +91,12 @@ class MiniCheetahOsc(MiniCheetah):
         # self.grf = self._compute_grf()
         if not self.cfg.osc.randomize_osc_params:
             self.compute_osc_slope()
+        self.update_gains_obs()
+
+    def update_gains_obs(self):
+        # Update the observations for low-level controller gains
+        self.kp_obs[:,0] = self.cfg.control.stiffness[self.cfg.control.stiffness.keys()[0]]
+        self.kd_obs[:,0] = self.cfg.control.damping[self.cfg.control.damping.keys()[0]]
 
     def _step_omega(self, dt):
         # Step the oscillator frequency, omega

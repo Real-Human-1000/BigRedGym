@@ -114,6 +114,18 @@ class MiniCheetahOscCfg(MiniCheetahCfg):
         max_push_vel_xy = 0.05
         push_box_dims = [0.2, 0.2, 0.2]  # x,y,z [m]
 
+    # Added domain randomization to automatically vary parameters
+    class domain_randomization(MiniCheetahCfg.domain_randomization):
+        class startup(MiniCheetahCfg.domain_randomization.startup):
+            contact_friction_range = [0.9, 1.1]
+            link_mass_scale_range = [0.9, 1.1]
+
+        class episode(MiniCheetahCfg.domain_randomization.episode):
+            scale_ranges = {
+                "p_gains": [20/BASE_KP, 50/BASE_KP],
+                "d_gains": [0.5/BASE_KD, 4.5/BASE_KD],
+            }
+
     class asset(MiniCheetahCfg.asset):
         shank_length_diff = 0  # Units in cm
         # file = "{GYM_ROOT_DIR}/resources/robots/" \
@@ -185,7 +197,9 @@ class MiniCheetahOscRunnerCfg(MiniCheetahRunnerCfg):
             "oscillator_obs",
             "dof_pos_target",
             "osc_omega",
-            "osc_omega_target"
+            "osc_omega_target",
+            "kp_obs",
+            "kd_obs",
             #  "osc_coupling"
             #  "oscillators_vel",
             #  "grf",
@@ -221,7 +235,9 @@ class MiniCheetahOscRunnerCfg(MiniCheetahRunnerCfg):
             "oscillators_vel",
             "dof_pos_target",
             "osc_omega_target",
-            "osc_omega"
+            "osc_omega",
+            "kp_obs",
+            "kd_obs"
         ]
         normalize_obs = True
 
