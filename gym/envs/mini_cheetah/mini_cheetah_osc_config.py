@@ -5,6 +5,8 @@ from gym.envs.mini_cheetah.mini_cheetah_config import (
 
 BASE_HEIGHT_REF = 0.33
 
+BASE_KP = (50+20)/2
+BASE_KD = (4.5+0.5)/2
 
 class MiniCheetahOscCfg(MiniCheetahCfg):
     class viewer:
@@ -61,8 +63,8 @@ class MiniCheetahOscCfg(MiniCheetahCfg):
 
     class control(MiniCheetahCfg.control):
         # * PD Drive parameters:
-        stiffness = {"haa": 40.0, "hfe": 40.0, "kfe": 40.0}
-        damping = {"haa": 1.5, "hfe": 1.5, "kfe": 1.5}
+        stiffness = {"haa": BASE_KP, "hfe": BASE_KP, "kfe": BASE_KP}
+        damping = {"haa": BASE_KD, "hfe": BASE_KD, "kfe": BASE_KD}
         ctrl_frequency = 100
         desired_sim_frequency = 500
 
