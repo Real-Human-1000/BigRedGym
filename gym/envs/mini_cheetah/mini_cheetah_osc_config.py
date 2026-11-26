@@ -61,8 +61,8 @@ class MiniCheetahOscCfg(MiniCheetahCfg):
 
     class control(MiniCheetahCfg.control):
         # * PD Drive parameters:
-        stiffness = {"haa": 20.0, "hfe": 20.0, "kfe": 20.0}
-        damping = {"haa": 0.5, "hfe": 0.5, "kfe": 0.5}
+        stiffness = {"haa": 40.0, "hfe": 40.0, "kfe": 40.0}
+        damping = {"haa": 1.5, "hfe": 1.5, "kfe": 1.5}
         ctrl_frequency = 100
         desired_sim_frequency = 500
 
