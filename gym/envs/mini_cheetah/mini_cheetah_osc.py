@@ -102,7 +102,7 @@ class MiniCheetahOsc(MiniCheetah):
         candidate_p = (torch.rand(self.num_envs, 1, device=self.device) * (self.cfg.control.stiffness_range[1] - self.cfg.control.stiffness_range[0]) + self.cfg.control.stiffness_range[0]).expand(self.num_envs, self.p_gains.size()[1])
         masked_update(self.p_gains, candidate_p, reset_mask)
         candidate_d = (torch.rand(self.num_envs, 1, device=self.device) * (self.cfg.control.damping_range[1] - self.cfg.control.damping_range[0]) + self.cfg.control.damping_range[0]).expand(self.num_envs, self.d_gains.size()[1])
-        masked_update(self.p_gains, candidate_d, reset_mask)
+        masked_update(self.d_gains, candidate_d, reset_mask)
         # Update observations
         self.kp_obs[:,0] = self.p_gains[:,0]
         self.kd_obs[:,0] = self.d_gains[:,0]
