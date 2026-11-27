@@ -5,8 +5,8 @@ from gym.envs.mini_cheetah.mini_cheetah_config import (
 
 BASE_HEIGHT_REF = 0.33
 
-BASE_KP = (50+20)/2
-BASE_KD = (4.5+0.5)/2
+BASE_KP = 20#(50+20)/2
+BASE_KD = 0.5#(4.5+0.5)/2
 
 class MiniCheetahOscCfg(MiniCheetahCfg):
     class viewer:
@@ -67,7 +67,7 @@ class MiniCheetahOscCfg(MiniCheetahCfg):
         damping = {"haa": BASE_KD, "hfe": BASE_KD, "kfe": BASE_KD}
         stiffness_range = [20, 50]
         damping_range = [0.5, 4.5]
-        randomize_gains = True
+        randomize_gains = False
         ctrl_frequency = 100
         desired_sim_frequency = 500
 
@@ -259,9 +259,9 @@ class MiniCheetahOscRunnerCfg(MiniCheetahRunnerCfg):
                 action_rate = 10  # -0.01
                 action_rate2 = 1  # -0.001
                 stand_still = 0.0
-                dof_pos_limits = 0.0
+                dof_pos_limits = 1.0  # 0.0
                 feet_contact_forces = 0.0
-                dof_near_home = 0.0
+                dof_near_home = 0.5  # 0.0
                 swing_grf = 4.0  # 1.0
                 stance_grf = 4.0  # 1.0
                 swing_velocity = 0.0

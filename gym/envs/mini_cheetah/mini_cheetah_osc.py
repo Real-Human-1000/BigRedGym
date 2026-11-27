@@ -34,8 +34,8 @@ class MiniCheetahOsc(MiniCheetah):
             self.num_envs, 1, device=self.device
         )
         self.osc_enabled = torch.ones_like(self.oscillators, device=self.device, dtype=torch.bool)
-        self.kp_obs = torch.ones(self.num_envs, 1, device=self.device)
-        self.kd_obs = torch.ones(self.num_envs, 1, device=self.device)
+        self.kp_obs = torch.ones(self.num_envs, 1, device=self.device) * self.cfg.control.stiffness["haa"]
+        self.kd_obs = torch.ones(self.num_envs, 1, device=self.device) * self.cfg.control.damping["haa"]
 
     def _reset_oscillators(self, reset_mask):
         if self.cfg.osc.init_to == "random":
@@ -83,6 +83,10 @@ class MiniCheetahOsc(MiniCheetah):
             < self.cfg.init_state.timeout_reset_ratio
         )
 
+        # Need to incorporate reset mask
+        if self.cfg.control.randomize_gains:
+            self.reset_gains_and_obs(reset_mask)
+
         state_reset_mask = reset_mask & (self.terminated | timed_out_subset)
         super()._reset_system(state_reset_mask)
 
@@ -91,14 +95,15 @@ class MiniCheetahOsc(MiniCheetah):
         # self.grf = self._compute_grf()
         if not self.cfg.osc.randomize_osc_params:
             self.compute_osc_slope()
-        if self.cfg.control.randomize_gains:
-            self.update_gains_obs()
 
-    def update_gains_obs(self):
+    def reset_gains_and_obs(self, reset_mask):
         # Randomize each environment's low-level controller gains
         # Update the observations for low-level controller gains
-        self.p_gains = (torch.rand(self.num_envs, 1, device=self.device) * (self.cfg.control.stiffness_range[1] - self.cfg.control.stiffness_range[0]) + self.cfg.control.stiffness_range[0]).expand(self.num_envs, self.p_gains.size()[1])
-        self.d_gains = (torch.rand(self.num_envs, 1, device=self.device) * (self.cfg.control.damping_range[1] - self.cfg.control.damping_range[0]) + self.cfg.control.damping_range[0]).expand(self.num_envs, self.d_gains.size()[1])
+        candidate_p = (torch.rand(self.num_envs, 1, device=self.device) * (self.cfg.control.stiffness_range[1] - self.cfg.control.stiffness_range[0]) + self.cfg.control.stiffness_range[0]).expand(self.num_envs, self.p_gains.size()[1])
+        masked_update(self.p_gains, candidate_p, reset_mask)
+        candidate_d = (torch.rand(self.num_envs, 1, device=self.device) * (self.cfg.control.damping_range[1] - self.cfg.control.damping_range[0]) + self.cfg.control.damping_range[0]).expand(self.num_envs, self.d_gains.size()[1])
+        masked_update(self.p_gains, candidate_d, reset_mask)
+        # Update observations
         self.kp_obs[:,0] = self.p_gains[:,0]
         self.kd_obs[:,0] = self.d_gains[:,0]
 
