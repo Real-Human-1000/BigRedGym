@@ -91,12 +91,16 @@ class MiniCheetahOsc(MiniCheetah):
         # self.grf = self._compute_grf()
         if not self.cfg.osc.randomize_osc_params:
             self.compute_osc_slope()
-        self.update_gains_obs()
+        if self.cfg.control.randomize_gains:
+            self.update_gains_obs()
 
     def update_gains_obs(self):
+        # Randomize each environment's low-level controller gains
         # Update the observations for low-level controller gains
-        self.kp_obs[:,0] = self.cfg.control.stiffness[self.cfg.control.stiffness.keys()[0]]
-        self.kd_obs[:,0] = self.cfg.control.damping[self.cfg.control.damping.keys()[0]]
+        self.p_gains = (torch.rand(self.num_envs, 1) * (self.cfg.control.stiffness_range[1] - self.cfg.control.stiffness_range[0]) + self.cfg.control.stiffness_range[0]).expand(self.num_envs, self.p_gains.size()[1])
+        self.d_gains = (torch.rand(self.num_envs, 1) * (self.cfg.control.damping_range[1] - self.cfg.control.damping_range[0]) + self.cfg.control.damping_range[0]).expand(self.num_envs, self.d_gains.size()[1])
+        self.kp_obs[:,0] = self.p_gains[:,0]
+        self.kd_obs[:,0] = self.d_gains[:,0]
 
     def _step_omega(self, dt):
         # Step the oscillator frequency, omega

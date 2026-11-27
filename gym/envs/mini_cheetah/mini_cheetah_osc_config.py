@@ -65,6 +65,9 @@ class MiniCheetahOscCfg(MiniCheetahCfg):
         # * PD Drive parameters:
         stiffness = {"haa": BASE_KP, "hfe": BASE_KP, "kfe": BASE_KP}
         damping = {"haa": BASE_KD, "hfe": BASE_KD, "kfe": BASE_KD}
+        stiffness_range = [20, 50]
+        damping_range = [0.5, 4.5]
+        randomize_gains = True
         ctrl_frequency = 100
         desired_sim_frequency = 500
 
@@ -120,11 +123,12 @@ class MiniCheetahOscCfg(MiniCheetahCfg):
             contact_friction_range = [0.9, 1.1]
             link_mass_scale_range = [0.9, 1.1]
 
-        class episode(MiniCheetahCfg.domain_randomization.episode):
-            scale_ranges = {
-                "p_gains": [20/BASE_KP, 50/BASE_KP],
-                "d_gains": [0.5/BASE_KD, 4.5/BASE_KD],
-            }
+        # Domain randomization changes every limb individually, so we can't really use it
+        # class episode(MiniCheetahCfg.domain_randomization.episode):
+        #     scale_ranges = {
+        #         "p_gains": [20/BASE_KP, 50/BASE_KP],
+        #         "d_gains": [0.5/BASE_KD, 4.5/BASE_KD],
+        #     }
 
     class asset(MiniCheetahCfg.asset):
         shank_length_diff = 0  # Units in cm
