@@ -67,7 +67,7 @@ class MiniCheetahOscCfg(MiniCheetahCfg):
         damping = {"haa": BASE_KD, "hfe": BASE_KD, "kfe": BASE_KD}
         stiffness_range = [20, 50]
         damping_range = [0.5, 4.5]
-        randomize_gains = False
+        randomize_gains = True
         ctrl_frequency = 100
         desired_sim_frequency = 500
 
