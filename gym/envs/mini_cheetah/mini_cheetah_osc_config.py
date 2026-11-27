@@ -8,6 +8,8 @@ BASE_HEIGHT_REF = 0.33
 BASE_KP = 20#(50+20)/2
 BASE_KD = 0.5#(4.5+0.5)/2
 
+TRAINING = True
+
 class MiniCheetahOscCfg(MiniCheetahCfg):
     class viewer:
         ref_env = 0
@@ -67,7 +69,7 @@ class MiniCheetahOscCfg(MiniCheetahCfg):
         damping = {"haa": BASE_KD, "hfe": BASE_KD, "kfe": BASE_KD}
         stiffness_range = [20, 40]
         damping_range = [0.5, 3.5]
-        randomize_gains = False
+        randomize_gains = TRAINING
         ctrl_frequency = 100
         desired_sim_frequency = 500
 
@@ -92,8 +94,12 @@ class MiniCheetahOscCfg(MiniCheetahCfg):
         omega_var = 0.0  # 0.25
         # coupling_step = 0.
         # coupling_stop = 0.
-        coupling_stop = 0.0
-        coupling_step = 0.0  # 1.0
+        if TRAINING:
+            coupling_stop = 0.0  # 4.0
+            coupling_step = 0.0  # 1.0
+        else:
+            coupling_stop = 4.0
+            coupling_step = 1.0
         coupling_slope = 0.0
         coupling_max = 4.0  # 1.0
         offset = 1.0
