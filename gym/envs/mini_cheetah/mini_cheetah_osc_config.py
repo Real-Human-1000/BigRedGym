@@ -54,7 +54,7 @@ class MiniCheetahOscCfg(MiniCheetahCfg):
         ]
         root_vel_range = [
             [-0.5, 2.0],  # x
-            [0.0, 0.0],  # y
+            [-0.5, 0.5],  # y  0.0,0.0
             [0.0, 0.0],  # z
             [0.0, 0.0],  # roll
             [0.0, 0.0],  # pitch
@@ -168,6 +168,8 @@ class MiniCheetahOscCfg(MiniCheetahCfg):
         tau_ff = 4 * [18, 18, 28]  # hip-abad, hip-pitch, knee
         # commands = [base_lin_vel, base_lin_vel, base_ang_vel]
         commands = [3, 1, 3]  # [base_lin_vel, base_lin_vel, base_ang_vel]
+        kp_obs = 35
+        kd_obs = 3.5
 
 
 class MiniCheetahOscRunnerCfg(MiniCheetahRunnerCfg):
@@ -259,11 +261,11 @@ class MiniCheetahOscRunnerCfg(MiniCheetahRunnerCfg):
                 action_rate = 10  # -0.01
                 action_rate2 = 1  # -0.001
                 stand_still = 0.0
-                dof_pos_limits = 1.0  # 0.0
+                dof_pos_limits = 0.0  # 0.0
                 feet_contact_forces = 0.0
-                dof_near_home = 0.5  # 0.0
-                swing_grf = 4.0  # 1.0
-                stance_grf = 4.0  # 1.0
+                dof_near_home = 0.0  # 0.0
+                swing_grf = 1.0  # 1.0
+                stance_grf = 1.0  # 1.0
                 swing_velocity = 0.0
                 stance_velocity = 0.0
                 coupled_grf = 0.0  # 8.
@@ -278,6 +280,6 @@ class MiniCheetahOscRunnerCfg(MiniCheetahRunnerCfg):
 
     class runner(MiniCheetahRunnerCfg.runner):
         run_name = ""
-        experiment_name = "MiniCheetahOsc_FreqControl"
+        experiment_name = "MiniCheetahOsc_FreqControl_GainsObs"
         max_iterations = 500  # number of policy updates
         algorithm_class_name = "PPO2"
