@@ -270,7 +270,7 @@ class MiniCheetahOscRunnerCfg(MiniCheetahRunnerCfg):
                 action_rate2 = 1  # -0.001
                 stand_still = 0.0
                 dof_pos_limits = 1.0  # 0.0
-                feet_contact_forces = 0.5  # 0.0
+                feet_contact_forces = 0.0  # 0.0
                 dof_near_home = 0.0  # 0.0
                 swing_grf = 3.0  # 1.0
                 stance_grf = 3.0  # 1.0
