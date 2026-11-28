@@ -262,8 +262,8 @@ class MiniCheetahOscRunnerCfg(MiniCheetahRunnerCfg):
                 lin_vel_z = 0.0
                 ang_vel_xy = 0.0
                 orientation = 1.0
-                torques = 0.5  # 5.0e-6
-                dof_vel = 0.5  # 0.0
+                torques = 0.1  # 5.0e-6
+                dof_vel = 0.0  # 0.0
                 min_base_height = 1.0
                 collision = 0
                 action_rate = 10  # -0.01
