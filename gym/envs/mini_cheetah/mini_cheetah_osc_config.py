@@ -8,9 +8,11 @@ BASE_HEIGHT_REF = 0.33
 BASE_KP = 20#(50+20)/2
 BASE_KD = 0.5#(4.5+0.5)/2
 
-TRAINING = True
+TRAINING = False
 
 class MiniCheetahOscCfg(MiniCheetahCfg):
+    TRAINING = TRAINING
+
     class viewer:
         ref_env = 0
         pos = [-2.0, 3, 2]  # [m]
@@ -99,7 +101,7 @@ class MiniCheetahOscCfg(MiniCheetahCfg):
             coupling_step = 0.0  # 1.0
         else:
             coupling_stop = 4.0
-            coupling_step = 1.0
+            coupling_step = 2.0
         coupling_slope = 0.0
         coupling_max = 4.0  # 1.0
         offset = 1.0
@@ -260,15 +262,15 @@ class MiniCheetahOscRunnerCfg(MiniCheetahRunnerCfg):
                 lin_vel_z = 0.0
                 ang_vel_xy = 0.0
                 orientation = 1.0
-                torques = 5.0e-6
-                dof_vel = 0.0
+                torques = 0.5  # 5.0e-6
+                dof_vel = 0.5  # 0.0
                 min_base_height = 1.0
                 collision = 0
                 action_rate = 10  # -0.01
                 action_rate2 = 1  # -0.001
                 stand_still = 0.0
                 dof_pos_limits = 1.0  # 0.0
-                feet_contact_forces = 0.0
+                feet_contact_forces = 0.5  # 0.0
                 dof_near_home = 0.0  # 0.0
                 swing_grf = 3.0  # 1.0
                 stance_grf = 3.0  # 1.0

@@ -159,7 +159,8 @@ class MiniCheetahOsc(MiniCheetah):
 
     def _post_physics_step(self):
         super()._post_physics_step()
-        # self._nullify_oscillators()
+        if not self.cfg.TRAINING:
+            self._nullify_oscillators()
         self._step_omega(self.dt / self.cfg.control.decimation)
         self._step_oscillators(self.dt / self.cfg.control.decimation)
         return None
