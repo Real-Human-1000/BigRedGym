@@ -8,7 +8,7 @@ BASE_HEIGHT_REF = 0.33
 BASE_KP = 20#(50+20)/2
 BASE_KD = 0.5#(4.5+0.5)/2
 
-TRAINING = False
+TRAINING = True
 
 class MiniCheetahOscCfg(MiniCheetahCfg):
     TRAINING = TRAINING
